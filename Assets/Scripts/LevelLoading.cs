@@ -6,6 +6,7 @@ using System.IO;
 public class LevelLoading : MonoBehaviour {
 
     public List<List<bool>> pacMov = new List<List<bool>>();
+    public float t;
 
     // Use this for initialization
     void Start () {
@@ -17,14 +18,14 @@ public class LevelLoading : MonoBehaviour {
 		
 	}
 
-    public void ReadFile(String path) {
+    public void ReadFile(string path) {
         StreamReader reader = new StreamReader(path);
         List<bool> tempList = new List<bool>();
-        pacMove.Add(tempList);
+        pacMov.Add(tempList);
 
         while (!reader.EndOfStream) {
             if (reader.Peek() == '\n') {
-                tempList = new tempList<bool>();
+                tempList = new List<bool>();
             } else if (reader.Peek() == ' ') {
                 tempList.Add(true);
             } else if (reader.Peek() == '#') {
