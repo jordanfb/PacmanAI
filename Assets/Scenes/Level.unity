@@ -163,6 +163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 307956821}
   - component: {fileID: 307956820}
+  - component: {fileID: 307956822}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -198,6 +199,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &307956822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 307956819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a3c6a8a09d797142b00259831d5cca6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingFile: ../Levels/level1.txt
+  floorTiles: 2000
+  wallTiles: 2300
+  levelWidth: -1
+  levelHeight: -1
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

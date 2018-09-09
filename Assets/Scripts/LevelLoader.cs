@@ -5,35 +5,105 @@ using System.IO;
 
 public class LevelLoader : MonoBehaviour {
 
+    public string startingFileAfterDatapath = "/Levels/level1.txt";
+    public List<char> floorTiles;
+    public List<char> wallTiles;
+
+
+
     public List<List<bool>> pacMov = new List<List<bool>>();
-    public float t;
+    public List<List<char>> tilecharArray = new List<List<char>>();
+    public int levelWidth = -1;
+    public int levelHeight = -1;
 
     // Use this for initialization
     void Start () {
-        ReadFile("../Levels/level1.txt");
+        if (FileExists(Application.dataPath + startingFileAfterDatapath))
+        {
+            ReadFile(Application.dataPath + startingFileAfterDatapath);
+        } else
+        {
+            Debug.LogError("Default starting file doesn't exist");
+        }
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
-    public void ReadFile(string path) {
+    public string[] DirectoryFiles(string path)
+    {
+        return Directory.GetFiles(path);
+    }
+
+    public bool FileExists(string path)
+    {
+        return File.Exists(path);
+    }
+
+    public bool ReadFile(string path) {
+        // reads a file and returns whether or not it was successfull.
+        // it delays replacing the old level until after we have passed all our checks
+
+        List<List<bool>> newPacMov = new List<List<bool>>();
+        List<List<char>> newTilecharArray = new List<List<char>>();
+        int newLevelWidth = -1;
+        int newLevelHeight = -1;
+
+        if (!FileExists(path))
+        {
+            return false; // errored because the file doesn't exist
+        }
+
         StreamReader reader = new StreamReader(path);
-        List<bool> tempList = new List<bool>();
-        pacMov.Add(tempList);
+        List<bool> tempList;
+        List<char> charRow;
 
-        while (!reader.EndOfStream) {
-            if (reader.Peek() == '\n') {
-                tempList = new List<bool>();
-            } else if (reader.Peek() == ' ') {
-                tempList.Add(true);
-            } else if (reader.Peek() == '#') {
-                tempList.Add(false);
+        string line;
+        while ((line = reader.ReadLine()) != null) {
+            tempList = new List<bool>();
+            charRow = new List<char>();
+            for (int i = 0; i < line.Length; i++)
+            {
+                char curr = line[i];
+                charRow.Add(curr);
+
+                if (floorTiles.Contains(curr))
+                {
+                    tempList.Add(true);
+                }
+                else if (wallTiles.Contains(curr))
+                {
+                    tempList.Add(false);
+                }
+                else
+                {
+                    Debug.Log("ERROR: FOUND A CHAR THAT ISN'T LISTED AS A FLOOR OR WALL TILE: " + curr);
+                }
             }
-            reader.Read();
+            newPacMov.Add(tempList);
+            newTilecharArray.Add(charRow);
+            if (newLevelWidth == -1)
+            {
+                newLevelWidth = charRow.Count;
+            } else if (newLevelWidth != charRow.Count)
+            {
+                reader.Close();
+                reader.Dispose();
+                return false; // if not all rows are the same width error out
+            }
         }
         reader.Close();
         reader.Dispose();
+
+        newLevelHeight = newPacMov.Count;
+        if (newLevelHeight == 0)
+        {
+            return false; // it errored
+        }
+
+
+        // now that we know we have a correctly formed level (probably...) we replace the old one with the new one
+        pacMov = newPacMov;
+        tilecharArray = newTilecharArray;
+        levelWidth = newLevelWidth;
+        levelHeight = newLevelHeight;
+        return true;
     }
 }
