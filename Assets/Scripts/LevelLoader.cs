@@ -6,10 +6,11 @@ using System.IO;
 public class LevelLoader : MonoBehaviour {
 
     public List<List<bool>> pacMov = new List<List<bool>>();
+    public float t;
 
     // Use this for initialization
     void Start () {
-        ReadFile("tileset.txt");
+        ReadFile("../Levels/level1.txt");
     }
 	
 	// Update is called once per frame
