@@ -219,7 +219,6 @@ public class LevelManager : MonoBehaviour {
                 else
                 {
                     char currentTileChar = tileCharArray[y][x];
-
                     if (currentTileChar == 'S' || currentTileChar == 's')
                     {
                         currentTileChar = ' '; // make it a floor
@@ -333,7 +332,7 @@ public class LevelManager : MonoBehaviour {
         float ratio = levelCamera.aspect;
         // Debug.Log("Aspect ratio: " + ratio);
         // the UIScreenCoveragePercent expands the camera even further so we can have UI on the sides, this ensures that it won't overlap with the level
-        levelCamera.orthographicSize = Mathf.Max(levelHeight / 2f / (1 - UIScreenCoveragePercent.y), levelWidth / 2f / ratio * (1 - UIScreenCoveragePercent.x));
+        levelCamera.orthographicSize = Mathf.Max(levelHeight / 2f / (1 - UIScreenCoveragePercent.y), levelWidth / 2f / ratio / (1 - UIScreenCoveragePercent.x));
 
         // then set the camera position, focusing on the leve, offset by the yoffset to account for the UI
         levelCamera.transform.position = new Vector3(levelWidth / 2f, levelHeight / 2f - UIYOffset * levelCamera.orthographicSize * 2, -10);
