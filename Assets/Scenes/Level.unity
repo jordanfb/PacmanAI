@@ -183,6 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelTilemap: {fileID: 2093684467}
+  tileKeys: 2000230000000000000000000000000000000000
   tiles:
   - {fileID: 11400000, guid: e4de8312284c6454ea3679e460afcb04, type: 2}
   - {fileID: 11400000, guid: 7d4c881b1be8979468c9c05fae779bd7, type: 2}
@@ -210,7 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a3c6a8a09d797142b00259831d5cca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingFile: ../Levels/level1.txt
+  startingFileAfterDatapath: /Levels/level1.txt
   floorTiles: 2000
   wallTiles: 2300
   levelWidth: -1

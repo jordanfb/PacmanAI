@@ -5,13 +5,34 @@ using UnityEngine.Tilemaps;
 
 public class LevelManager : MonoBehaviour {
 
+    // Special characters in level loading:
+    // S = spawn for pacman
+    // I = inky spawn
+    // B = blinky spawn
+    // P = pinky spawn
+    // C = clyde spawn
+    // uppercase is spawning facing upwards
+    // lowercase is spawning facing downwards
+    // we may do other directions if we decide we want them...
+
     [SerializeField]
     private Tilemap levelTilemap;
+    [SerializeField]
+    private List<char> tileKeys; // each of these are the keys for the tiles in the tiles list. Make sure to keep them in line or bad things will happen :(
     [SerializeField]
     private List<Tile> tiles; // indexed by number for now. We'll also have to have special tile numbers that represent special things like spawning, dots, and ghost spawn stuff.
 
     private List<List<bool>> isWalkableArray;
     private List<List<char>> tileCharArray = null;
+
+    private Vector2 pacmanSpawnLocation;
+    private SpawnOrientation pacmanSpawnOrientation;
+    private Vector2[] ghostSpawnLocations;
+    private SpawnOrientation[] ghostSpawnOrientations;
+    private List<Vector2> dotLocations;
+    private List<Vector2> bigDotLocations;
+    private int levelWidth;
+    private int levelHeight;
 
     private LevelLoader levelLoader;
 
@@ -30,71 +51,252 @@ public class LevelManager : MonoBehaviour {
         return isWalkableArray;
     }
 
+    public SpawnOrientation[] GetGhostSpawnOrientations()
+    {
+        return ghostSpawnOrientations; // returns a 4 long array with the orientation of Inky Blinky Pinky and Clyde in that order
+    }
+
+    public Vector2[] GetGhostSpawnLocations()
+    {
+        return ghostSpawnLocations; // returns a 4 long array with the position of Inky Blinky Pinky and Clyde in that order. If the coordinates are at (-1, -1) it doesn't have a spawn location in this level
+    }
+
+    public Vector2 GetPacmanSpawnLocation()
+    {
+        return pacmanSpawnLocation;
+    }
+
+    public SpawnOrientation GetPacmanSpawnOrientation()
+    {
+        return pacmanSpawnOrientation;
+    }
+    
+    public List<Vector2> GetDotLocations()
+    {
+        return dotLocations;
+    }
+
+    public List<Vector2> GetBigDotLocations()
+    {
+        return bigDotLocations;
+    }
+
+    public int GetLevelWidth()
+    {
+        return levelWidth;
+    }
+
+    public int GetLevelHeight()
+    {
+        return levelHeight;
+    }
+    
+    public Vector2Int GetLevelDimensions()
+    {
+        return new Vector2Int(levelWidth, levelHeight);
+    }
+
     void SetTilemap(bool useTileArray = false)
     {
+        int numPacmanSpawnLocations = 0; // these are for averaging the positions
+        int[] numGhostSpawnLocations = new int[4];
+        dotLocations = new List<Vector2>();
+        bigDotLocations = new List<Vector2>();
+        levelHeight = isWalkableArray.Count;
+        levelWidth = isWalkableArray[0].Count;
+        if (useTileArray)
+        {
+            pacmanSpawnLocation = Vector2Int.zero;
+            ghostSpawnLocations = new Vector2[] { -Vector2.one, -Vector2.one, -Vector2.one, -Vector2.one };
+            ghostSpawnOrientations = new SpawnOrientation[] { SpawnOrientation.North, SpawnOrientation.North, SpawnOrientation.North, SpawnOrientation.North };
+        }
         levelTilemap.ClearAllTiles();
         // for now just load a bunch of bools if they're tiles or not because that's pretty basic
         for (int y = 0; y < isWalkableArray.Count; y++)
         {
             for (int x = 0; x < isWalkableArray[0].Count; x++)
             {
-                if (useTileArray)
+                if (!useTileArray)
                 {
                     if (isWalkableArray[y][x])
                     {
+                        // this is the floor
                         levelTilemap.SetTile(new Vector3Int(x, y, 0), tiles[0]);
                     }
                     else
                     {
+                        // this is the generic solid square wall
                         levelTilemap.SetTile(new Vector3Int(x, y, 0), tiles[1]);
                     }
-                } else
+                }
+                else
                 {
+                    char currentTileChar = tileCharArray[y][x];
+
+                    if (currentTileChar == 'S' || currentTileChar == 's')
+                    {
+                        currentTileChar = ' '; // make it a floor
+                        pacmanSpawnLocation += new Vector2(x, y);
+                        numPacmanSpawnLocations++; // so we can average the position later
+                        if (currentTileChar == 'S')
+                        {
+                            pacmanSpawnOrientation = SpawnOrientation.North;
+                        }
+                        else
+                        {
+                            pacmanSpawnOrientation = SpawnOrientation.South;
+                        }
+                    }
+                    else if (currentTileChar == 'I' || currentTileChar == 'i')
+                    {
+                        currentTileChar = ' '; // make it a floor
+                        ghostSpawnLocations[0] += new Vector2(x, y);
+                        numGhostSpawnLocations[0]++; // so we can average the position later
+                        if (currentTileChar == 'I')
+                        {
+                            ghostSpawnOrientations[0] = SpawnOrientation.North;
+                        }
+                        else
+                        {
+                            ghostSpawnOrientations[0] = SpawnOrientation.South;
+                        }
+                    }
+                    else if (currentTileChar == 'B' || currentTileChar == 'b')
+                    {
+                        currentTileChar = ' '; // make it a floor
+                        ghostSpawnLocations[1] += new Vector2(x, y);
+                        numGhostSpawnLocations[1]++; // so we can average the position later
+                        if (currentTileChar == 'B')
+                        {
+                            ghostSpawnOrientations[1] = SpawnOrientation.North;
+                        }
+                        else
+                        {
+                            ghostSpawnOrientations[1] = SpawnOrientation.South;
+                        }
+                    }
+                    else if (currentTileChar == 'P' || currentTileChar == 'p')
+                    {
+                        currentTileChar = ' '; // make it a floor
+                        ghostSpawnLocations[2] += new Vector2(x, y);
+                        numGhostSpawnLocations[2]++; // so we can average the position later
+                        if (currentTileChar == 'P')
+                        {
+                            ghostSpawnOrientations[2] = SpawnOrientation.North;
+                        }
+                        else
+                        {
+                            ghostSpawnOrientations[2] = SpawnOrientation.South;
+                        }
+                    }
+                    else if (currentTileChar == 'C' || currentTileChar == 'c')
+                    {
+                        currentTileChar = ' '; // make it a floor
+                        ghostSpawnLocations[3] += new Vector2(x, y);
+                        numGhostSpawnLocations[3]++; // so we can average the position later
+                        if (currentTileChar == 'C')
+                        {
+                            ghostSpawnOrientations[3] = SpawnOrientation.North;
+                        }
+                        else
+                        {
+                            ghostSpawnOrientations[3] = SpawnOrientation.South;
+                        }
+                    }
+                    else if (currentTileChar == '.')
+                    {
+                        // add a small dot
+                        dotLocations.Add(new Vector2(x, y));
+                        currentTileChar = ' '; // make it a floor
+                    }
+                    else if (currentTileChar == '*')
+                    {
+                        // add a big dot
+                        bigDotLocations.Add(new Vector2(x, y));
+                        currentTileChar = ' '; // make it a floor
+                    }
+
                     // then use the char mapping to the index to the tile
+                    int currTileIndex = tileKeys.FindIndex(u => u == currentTileChar);
+                    if (currTileIndex >= 0 && currTileIndex < tiles.Count)
+                    {
+                        levelTilemap.SetTile(new Vector3Int(x, y, 0), tiles[currTileIndex]);
+                    } else
+                    {
+                        levelTilemap.SetTile(new Vector3Int(x, y, 0), tiles[0]);
+                        Debug.LogError("CurrTileIndex not found");
+                    }
                 }
             }
         }
+        
+        // now average the spawn locations to get them located correctly:
+        pacmanSpawnLocation /= numPacmanSpawnLocations;
+        for (int i = 0; i < ghostSpawnLocations.Length; i++)
+        {
+            ghostSpawnLocations[i] /= numGhostSpawnLocations[i];
+        }
     }
 
-    List<List<bool>> CreateRandomIsWallList(int width = 20, int height = 20)
+    void CreateRandomIsWallList(int width = 20, int height = 20)
     {
         List<List<bool>> output = new List<List<bool>>();
+        List<List<char>> newCharArray = new List<List<char>>();
         for (int y = 0; y < height; y++)
         {
-            List<bool> currentZ = new List<bool>();
+            List<bool> currentY = new List<bool>();
+            List<char> currentCharRow = new List<char>();
             for (int x = 0; x < width; x++)
             {
-                currentZ.Add(Random.value < .5);
+                if (Random.value < .5f)
+                {
+                    currentY.Add(false);
+                    currentCharRow.Add('#');
+                }
+                else
+                {
+                    currentY.Add(true);
+                    currentCharRow.Add(' ');
+                }
             }
-            output.Add(currentZ);
+            output.Add(currentY);
+            newCharArray.Add(currentCharRow);
         }
-        return output;
+        newCharArray[Mathf.FloorToInt(height / 2)][Mathf.FloorToInt(width / 2)] = 'S'; // set the start position for pacman. Don't bother with the ghosts for this one I guess...
+        SetMap(output, newCharArray);
     }
 
     private void CreateSquareMap(int width = 20, int height = 20)
     {
         List<List<bool>> output = new List<List<bool>>();
+        List<List<char>> newCharArray = new List<List<char>>();
         for (int y = 0; y < height; y++)
         {
-            List<bool> currentZ = new List<bool>();
+            List<bool> currentY = new List<bool>();
+            List<char> currentCharRow = new List<char>();
             for (int x = 0; x < width; x++)
             {
                 if (y == 0 || y == height-1) {
-                    currentZ.Add(false);
+                    currentY.Add(false);
+                    currentCharRow.Add('#');
                 } else
                 {
                     if (x == 0 || x == width -1)
                     {
-                        currentZ.Add(false);
+                        currentY.Add(false);
+                        currentCharRow.Add('#');
                     } else
                     {
-                        currentZ.Add(true);
+                        currentY.Add(true);
+                        currentCharRow.Add(' ');
                     }
                 }
             }
-            output.Add(currentZ);
+            output.Add(currentY);
+            newCharArray.Add(currentCharRow);
         }
-        SetMap(output);
+        newCharArray[Mathf.FloorToInt(height / 2)][Mathf.FloorToInt(width / 2)] = 'S'; // set the start position for pacman. Don't bother with the ghosts for this one I guess...
+        SetMap(output, newCharArray);
     }
 
     private void SetMap(List<List<bool>> walkable, List<List<char>> charArray = null)
@@ -113,16 +315,21 @@ public class LevelManager : MonoBehaviour {
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.R))
         {
-            SetMap(CreateRandomIsWallList());
-            SetTilemap();
+            CreateRandomIsWallList();
+            SetTilemap(true);
         } else if (Input.GetKeyDown(KeyCode.I))
         {
             CreateSquareMap();
-            SetTilemap();
+            SetTilemap(true);
         } else if (Input.GetKeyDown(KeyCode.L))
         {
             // load it from the level loader's contents
             LoadFromLevelLoader();
         }
 	}
+
+    public enum SpawnOrientation // facing that direction
+    {
+        North, East, South, West
+    }
 }

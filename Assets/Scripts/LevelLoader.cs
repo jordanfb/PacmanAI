@@ -45,6 +45,7 @@ public class LevelLoader : MonoBehaviour {
         List<List<char>> newTilecharArray = new List<List<char>>();
         int newLevelWidth = -1;
         int newLevelHeight = -1;
+        bool hasPacmanSpawn = false;
 
         if (!FileExists(path))
         {
@@ -63,6 +64,19 @@ public class LevelLoader : MonoBehaviour {
             {
                 char curr = line[i];
                 charRow.Add(curr);
+
+                if (curr == 'S' || curr == 's')
+                {
+                    // pacman spawn
+                    /*
+                     * I commented this out because we want pacman to spawn between two tiles, so it makes life easier if we can average the position of pacman between to starting positions...
+                     * if (hasPacmanSpawn)
+                    {
+                        Debug.LogError("Tried to load a level with two pacman spawns");
+                        return false; // can't have two pacman spawns
+                    }*/
+                    hasPacmanSpawn = true;
+                }
 
                 if (floorTiles.Contains(curr))
                 {
@@ -96,6 +110,11 @@ public class LevelLoader : MonoBehaviour {
         if (newLevelHeight == 0)
         {
             return false; // it errored
+        }
+        if (!hasPacmanSpawn)
+        {
+            Debug.LogError("Tried to load a level with no pacman spawn");
+            return false;
         }
 
 
