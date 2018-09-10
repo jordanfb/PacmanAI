@@ -5,7 +5,7 @@ using System.IO;
 
 public class LevelLoader : MonoBehaviour {
 
-    public string startingFileAfterDatapath = "/Levels/level1.txt";
+    public string startingFileAfterDatapath = "/Levels/level1-1.txt";
     public List<char> floorTiles;
     public List<char> wallTiles;
 

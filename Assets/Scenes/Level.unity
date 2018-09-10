@@ -260,10 +260,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelTilemap: {fileID: 2093684467}
-  tileKeys: 2000230000000000000000000000000000000000
+  tileKeys: 200023006100410064004400650045006600460067004700680048006a004a006b004b006c004c006d004d006e004e006f004f0071005100720052007400540075005500760056007700570078005800790059007a005a00
   tiles:
   - {fileID: 11400000, guid: e4de8312284c6454ea3679e460afcb04, type: 2}
   - {fileID: 11400000, guid: 7d4c881b1be8979468c9c05fae779bd7, type: 2}
+  - {fileID: 11400000, guid: 59ced26f233e3004384c8b80b40021b1, type: 2}
+  - {fileID: 11400000, guid: 3ff897002305e68488780282e8f75e91, type: 2}
+  - {fileID: 11400000, guid: 6c94d45bb0de7d54cbf9f7a4f6024bd2, type: 2}
+  - {fileID: 11400000, guid: dd92ea2586931374e9c0c47f8ddc4916, type: 2}
+  - {fileID: 11400000, guid: 3cd88c5a8b7706243befc8eb697f06c6, type: 2}
+  - {fileID: 11400000, guid: 5cd4334cfa57e1b44a179b4f21222cf8, type: 2}
+  - {fileID: 11400000, guid: 602deccfc3442044faa7d737d138eb73, type: 2}
+  - {fileID: 11400000, guid: b4dc83f8c2346e644ae08ebd328443e9, type: 2}
+  - {fileID: 11400000, guid: 5b5059d15b256ff45bc5f046ba4e4e41, type: 2}
+  - {fileID: 11400000, guid: d47318a034b27e3499a764447d5bfae1, type: 2}
+  - {fileID: 11400000, guid: b129aa7c35897fb45bb5c0bc3a703391, type: 2}
+  - {fileID: 11400000, guid: c0d8e5902cff74648a9727e8603b73ff, type: 2}
+  - {fileID: 11400000, guid: 47774dc69031aba4baa8dd085eda12f2, type: 2}
+  - {fileID: 11400000, guid: 7d4c881b1be8979468c9c05fae779bd7, type: 2}
+  - {fileID: 11400000, guid: a9ddb2ae2a13a0549b76884d58d8fb5d, type: 2}
+  - {fileID: 11400000, guid: 7d4c881b1be8979468c9c05fae779bd7, type: 2}
+  - {fileID: 11400000, guid: 59a2bda5bfba44748813387a791efbab, type: 2}
+  - {fileID: 11400000, guid: 7d4c881b1be8979468c9c05fae779bd7, type: 2}
+  - {fileID: 11400000, guid: 06173aff664763b4484a456b5fb7c093, type: 2}
+  - {fileID: 11400000, guid: 8f71d9bba0a915b41a10e3be92b23f09, type: 2}
+  - {fileID: 11400000, guid: 55d7ad73d9e3a3c4da2fdc6e42a14f3c, type: 2}
+  - {fileID: 11400000, guid: 4706c1c888188a443af0c2ebc1be029d, type: 2}
+  - {fileID: 11400000, guid: dad4bbf09d0de3a409aae76906dc7765, type: 2}
+  - {fileID: 11400000, guid: 309a482743946cc4b8bb5bdf4728d442, type: 2}
+  - {fileID: 11400000, guid: 646e06d5343a50a4aad6498a06cc9034, type: 2}
+  - {fileID: 11400000, guid: 2e17f246901e8ba4f944c6d1503b25bc, type: 2}
+  - {fileID: 11400000, guid: d93e9ad48adc95e4a87a21c6cd927101, type: 2}
+  - {fileID: 11400000, guid: 7d4c881b1be8979468c9c05fae779bd7, type: 2}
+  - {fileID: 11400000, guid: 5ac40d1667e0a9845b179d1ecace6540, type: 2}
+  - {fileID: 11400000, guid: c433543ac88eeae4a825e92c98ff9e49, type: 2}
+  - {fileID: 11400000, guid: d3be94c86d7216c4bb26855a64ed06bc, type: 2}
+  - {fileID: 11400000, guid: bc3a45c100d7e8a4c84b84a1319de8cf, type: 2}
+  - {fileID: 11400000, guid: 290006fbd08a89e45a6701dd8da72887, type: 2}
+  - {fileID: 11400000, guid: 11cb2d548c72c134c8a939c618197b9a, type: 2}
+  - {fileID: 11400000, guid: 9a2fd7677c822764db5caebed92982e1, type: 2}
+  - {fileID: 11400000, guid: e82b6894ff110754b8a5055c877caefa, type: 2}
+  - {fileID: 11400000, guid: 717e5a2da91946e4c90cafc87ec7b09e, type: 2}
+  - {fileID: 11400000, guid: 7d4c881b1be8979468c9c05fae779bd7, type: 2}
+  - {fileID: 11400000, guid: 68a4b9b91a214ce498ca4559ca9e91e5, type: 2}
+  - {fileID: 11400000, guid: bb68daef36fdd214886162a9357683e0, type: 2}
+  - {fileID: 11400000, guid: 2ab4bdad65867b2418e13a339a5ade4e, type: 2}
+  - {fileID: 11400000, guid: 18d557af7502d4346887ab8eded7bb81, type: 2}
   pacmanPrefab: {fileID: 0}
   inkyPrefab: {fileID: 0}
   blinkyPrefab: {fileID: 0}
@@ -301,9 +343,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a3c6a8a09d797142b00259831d5cca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingFileAfterDatapath: /Levels/level1.txt
+  startingFileAfterDatapath: /Levels/level1-1.txt
   floorTiles: 200053007300490069004200620050007000430063002e002a002600
-  wallTiles: 2300
+  wallTiles: 23006100410064004400650045006600460067004700680048006a004a006b004b006c004c006d004d006e004e006f004f0071005100720052007400540075005500760056007700570078005800790059007a005a00
   levelWidth: -1
   levelHeight: -1
 --- !u!1 &519420028
