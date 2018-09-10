@@ -92,6 +92,7 @@ public class LevelManager : MonoBehaviour {
             HighScore = 0;
         }
         levelLoader = GetComponent<LevelLoader>();
+        LoadFromLevelLoader();
 	}
 
     public int Points

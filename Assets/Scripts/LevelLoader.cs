@@ -16,8 +16,7 @@ public class LevelLoader : MonoBehaviour {
     public int levelWidth = -1;
     public int levelHeight = -1;
 
-    // Use this for initialization
-    void Start () {
+    void Awake () {
         if (FileExists(Application.dataPath + startingFileAfterDatapath))
         {
             ReadFile(Application.dataPath + startingFileAfterDatapath);
