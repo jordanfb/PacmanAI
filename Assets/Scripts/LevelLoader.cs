@@ -119,6 +119,10 @@ public class LevelLoader : MonoBehaviour {
 
 
         // now that we know we have a correctly formed level (probably...) we replace the old one with the new one
+        // reverse them so that they're the correct orientation
+        newPacMov.Reverse();
+        newTilecharArray.Reverse();
+
         pacMov = newPacMov;
         tilecharArray = newTilecharArray;
         levelWidth = newLevelWidth;
