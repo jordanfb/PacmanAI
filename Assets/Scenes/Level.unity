@@ -187,6 +187,14 @@ MonoBehaviour:
   tiles:
   - {fileID: 11400000, guid: e4de8312284c6454ea3679e460afcb04, type: 2}
   - {fileID: 11400000, guid: 7d4c881b1be8979468c9c05fae779bd7, type: 2}
+  pacmanPrefab: {fileID: 0}
+  inkyPrefab: {fileID: 0}
+  blinkyPrefab: {fileID: 0}
+  pinkyPrefab: {fileID: 0}
+  clydePrefab: {fileID: 0}
+  dotPrefab: {fileID: 0}
+  bigDotPrefab: {fileID: 0}
+  cherryPrefab: {fileID: 0}
 --- !u!4 &307956821
 Transform:
   m_ObjectHideFlags: 0
@@ -212,7 +220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingFileAfterDatapath: /Levels/level1.txt
-  floorTiles: 2000
+  floorTiles: 200053007300490069004200620050007000430063002e002a002600
   wallTiles: 2300
   levelWidth: -1
   levelHeight: -1

@@ -22,6 +22,25 @@ public class LevelManager : MonoBehaviour {
     [SerializeField]
     private List<Tile> tiles; // indexed by number for now. We'll also have to have special tile numbers that represent special things like spawning, dots, and ghost spawn stuff.
 
+    [Space]
+    [SerializeField]
+    private GameObject pacmanPrefab;
+    [SerializeField]
+    private GameObject inkyPrefab;
+    [SerializeField]
+    private GameObject blinkyPrefab;
+    [SerializeField]
+    private GameObject pinkyPrefab;
+    [SerializeField]
+    private GameObject clydePrefab;
+    [SerializeField]
+    private GameObject dotPrefab;
+    [SerializeField]
+    private GameObject bigDotPrefab;
+    [SerializeField]
+    private GameObject cherryPrefab;
+
+
     private List<List<bool>> isWalkableArray;
     private List<List<char>> tileCharArray = null;
 
@@ -31,8 +50,11 @@ public class LevelManager : MonoBehaviour {
     private SpawnOrientation[] ghostSpawnOrientations;
     private List<Vector2> dotLocations;
     private List<Vector2> bigDotLocations;
+    private List<Vector2> cherryLocations;
     private int levelWidth;
     private int levelHeight;
+
+    private List<GameObject> levelGameObjects = new List<GameObject>(); // these get destroyed and remade every time the level is reloaded.
 
     private LevelLoader levelLoader;
 
@@ -81,6 +103,11 @@ public class LevelManager : MonoBehaviour {
         return bigDotLocations;
     }
 
+    public List<Vector2> GetCherryLocations()
+    {
+        return cherryLocations;
+    }
+
     public int GetLevelWidth()
     {
         return levelWidth;
@@ -102,6 +129,7 @@ public class LevelManager : MonoBehaviour {
         int[] numGhostSpawnLocations = new int[4];
         dotLocations = new List<Vector2>();
         bigDotLocations = new List<Vector2>();
+        cherryLocations = new List<Vector2>();
         levelHeight = isWalkableArray.Count;
         levelWidth = isWalkableArray[0].Count;
         if (useTileArray)
@@ -214,6 +242,11 @@ public class LevelManager : MonoBehaviour {
                         // add a big dot
                         bigDotLocations.Add(new Vector2(x, y));
                         currentTileChar = ' '; // make it a floor
+                    } else if (currentTileChar == '&')
+                    {
+                        // get it? it's twisty like a cherry
+                        cherryLocations.Add(new Vector2(x, y));
+                        currentTileChar = ' ';
                     }
 
                     // then use the char mapping to the index to the tile
@@ -309,22 +342,101 @@ public class LevelManager : MonoBehaviour {
     {
         SetMap(levelLoader.pacMov, levelLoader.tilecharArray);
         SetTilemap(true);
+        ReloadLevel();
+    }
+
+    void ReloadLevel()
+    {
+        // this destroys all the gameobjects created and resets the level
+        for (int i = 0; i < levelGameObjects.Count; i++)
+        {
+            Destroy(levelGameObjects[i]);
+        }
+        levelGameObjects = new List<GameObject>();
+
+        /*
+        // now spawn new ones and add them to the levelgameobjects list:
+        GameObject pacman = Instantiate(pacmanPrefab);
+        levelGameObjects.Add(pacman);
+        // set the pacman transform and orientation etc:
+        pacman.transform.position = pacmanSpawnLocation;
+        // etc: pacman.orientation = pacmanSpawnOrientation etc.
+
+        if (ghostSpawnLocations[0].x >= 0)
+        {
+            // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
+            GameObject inky = Instantiate(inkyPrefab);
+            levelGameObjects.Add(inky);
+            inky.transform.position = ghostSpawnLocations[0];
+            // inky.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[0]
+        }
+        if (ghostSpawnLocations[1].x >= 0)
+        {
+            // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
+            GameObject blinky = Instantiate(blinkyPrefab);
+            levelGameObjects.Add(blinky);
+            blinky.transform.position = ghostSpawnLocations[0];
+            // blinky.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[1]
+        }
+        if (ghostSpawnLocations[2].x >= 0)
+        {
+            // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
+            GameObject pinky = Instantiate(pinkyPrefab);
+            levelGameObjects.Add(pinky);
+            pinky.transform.position = ghostSpawnLocations[0];
+            // pinky.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[2]
+        }
+        if (ghostSpawnLocations[3].x >= 0)
+        {
+            // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
+            GameObject clyde = Instantiate(clydePrefab);
+            levelGameObjects.Add(clyde);
+            clyde.transform.position = ghostSpawnLocations[0];
+            // clyde.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[3]
+        }
+        for (int i = 0; i < dotLocations.Count; i++)
+        {
+            GameObject dot = Instantiate(dotPrefab);
+            levelGameObjects.Add(dot);
+            dot.transform.position = dotLocations[i];
+        }
+        for (int i = 0; i < bigDotLocations.Count; i++)
+        {
+            GameObject bigDot = Instantiate(bigDotPrefab);
+            levelGameObjects.Add(bigDot);
+            bigDot.transform.position = bigDotLocations[i];
+        }
+        for (int i = 0; i < cherryLocations.Count; i++)
+        {
+            GameObject cherry = Instantiate(cherryPrefab);
+            levelGameObjects.Add(cherry);
+            cherry.transform.position = cherryLocations[i];
+        }
+
+        */
     }
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.R))
+		if (Input.GetKeyDown(KeyCode.O))
         {
             CreateRandomIsWallList();
             SetTilemap(true);
-        } else if (Input.GetKeyDown(KeyCode.I))
+            ReloadLevel();
+        }
+        else if (Input.GetKeyDown(KeyCode.I))
         {
             CreateSquareMap();
             SetTilemap(true);
-        } else if (Input.GetKeyDown(KeyCode.L))
+            ReloadLevel();
+        }
+        else if (Input.GetKeyDown(KeyCode.L))
         {
             // load it from the level loader's contents
             LoadFromLevelLoader();
+        } else if (Input.GetKeyDown(KeyCode.R))
+        {
+            ReloadLevel();
         }
 	}
 
