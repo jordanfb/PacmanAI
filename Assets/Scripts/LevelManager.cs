@@ -7,11 +7,14 @@ using UnityEngine.UI;
 public class LevelManager : MonoBehaviour {
 
     // Special characters in level loading:
-    // S = spawn for pacman
-    // I = inky spawn
-    // B = blinky spawn
-    // P = pinky spawn
-    // C = clyde spawn
+    // . = dot
+    // * = big dot
+    // & = cherry
+    // S/s = spawn for pacman
+    // I/i = inky spawn
+    // B/b = blinky spawn
+    // P/p = pinky spawn
+    // C/c = clyde spawn
     // uppercase is spawning facing upwards
     // lowercase is spawning facing downwards
     // we may do other directions if we decide we want them...
@@ -433,7 +436,7 @@ public class LevelManager : MonoBehaviour {
         ghostKills = 0;
         currentGhostKills = 0;
         levelTime = 0;
-        numLives = 0;
+        numLives = 2;
 
 
     /*
