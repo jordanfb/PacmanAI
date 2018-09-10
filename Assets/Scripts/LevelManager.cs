@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour {
 
@@ -40,6 +41,19 @@ public class LevelManager : MonoBehaviour {
     [SerializeField]
     private GameObject cherryPrefab;
 
+    [Space]
+    [SerializeField]
+    private Camera levelCamera; // this is used to focus it on the level. We also have to account for the percent of the screen that the UI takes up.
+    [SerializeField]
+    private Vector2 UIScreenCoveragePercent; // this is what percentage of screen is covered by UI for the x and the y dimensions so the camera can scale the level appropriately
+    [SerializeField]
+    private float UIYOffset = 0; // the percent of the screen that it's offset by vertically (so that we can have more UI on th bottom than the top). Positive moves the level up, negative moves it down
+
+    [Space]
+    [SerializeField]
+    private Text scoreDisplay;
+    [SerializeField]
+    private Text highscoreDisplay;
 
     private List<List<bool>> isWalkableArray;
     private List<List<char>> tileCharArray = null;
@@ -54,14 +68,56 @@ public class LevelManager : MonoBehaviour {
     private int levelWidth;
     private int levelHeight;
 
+    private int points;
+    private int ghostKills;
+    private int currentGhostKills;
+    private float levelTime;
+    private int highScore;
+    private int numLives;
     private List<GameObject> levelGameObjects = new List<GameObject>(); // these get destroyed and remade every time the level is reloaded.
 
     private LevelLoader levelLoader;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
+        if (PlayerPrefs.HasKey("HighScore"))
+        {
+            HighScore = PlayerPrefs.GetInt("HighScore");
+        }
+        else
+        {
+            HighScore = 0;
+        }
         levelLoader = GetComponent<LevelLoader>();
 	}
+
+    public int Points
+    {
+        get
+        {
+            return points;
+        }
+
+        set
+        {
+            points = value;
+            scoreDisplay.text = value.ToString("00000");
+        }
+    }
+
+    public int HighScore
+    {
+        get
+        {
+            return highScore;
+        }
+
+        set
+        {
+            highScore = value;
+            highscoreDisplay.text = value.ToString("00000");
+        }
+    }
 
     public bool GetIsTileWalkable(int x, int y)
     {
@@ -269,6 +325,15 @@ public class LevelManager : MonoBehaviour {
         {
             ghostSpawnLocations[i] /= numGhostSpawnLocations[i];
         }
+
+        // set the camera orthographic size to encompas the width and height of the level
+        float ratio = levelCamera.aspect;
+        // Debug.Log("Aspect ratio: " + ratio);
+        // the UIScreenCoveragePercent expands the camera even further so we can have UI on the sides, this ensures that it won't overlap with the level
+        levelCamera.orthographicSize = Mathf.Max(levelHeight / 2f / (1 - UIScreenCoveragePercent.y), levelWidth / 2f / ratio * (1 - UIScreenCoveragePercent.x));
+
+        // then set the camera position, focusing on the leve, offset by the yoffset to account for the UI
+        levelCamera.transform.position = new Vector3(levelWidth / 2f, levelHeight / 2f - UIYOffset * levelCamera.orthographicSize * 2, -10);
     }
 
     void CreateRandomIsWallList(int width = 20, int height = 20)
@@ -345,6 +410,17 @@ public class LevelManager : MonoBehaviour {
         ReloadLevel();
     }
 
+    public void AddPoints(int n)
+    {
+        // add points to this current game of pacman
+        Points += n;
+        if (Points > highScore)
+        {
+            HighScore = Points;
+            PlayerPrefs.SetInt("HighScore", highScore);
+        }
+    }
+
     void ReloadLevel()
     {
         // this destroys all the gameobjects created and resets the level
@@ -353,68 +429,74 @@ public class LevelManager : MonoBehaviour {
             Destroy(levelGameObjects[i]);
         }
         levelGameObjects = new List<GameObject>();
+        Points = 0;
+        ghostKills = 0;
+        currentGhostKills = 0;
+        levelTime = 0;
+        numLives = 0;
 
-        /*
-        // now spawn new ones and add them to the levelgameobjects list:
-        GameObject pacman = Instantiate(pacmanPrefab);
-        levelGameObjects.Add(pacman);
-        // set the pacman transform and orientation etc:
-        pacman.transform.position = pacmanSpawnLocation;
-        // etc: pacman.orientation = pacmanSpawnOrientation etc.
 
-        if (ghostSpawnLocations[0].x >= 0)
-        {
-            // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
-            GameObject inky = Instantiate(inkyPrefab);
-            levelGameObjects.Add(inky);
-            inky.transform.position = ghostSpawnLocations[0];
-            // inky.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[0]
-        }
-        if (ghostSpawnLocations[1].x >= 0)
-        {
-            // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
-            GameObject blinky = Instantiate(blinkyPrefab);
-            levelGameObjects.Add(blinky);
-            blinky.transform.position = ghostSpawnLocations[0];
-            // blinky.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[1]
-        }
-        if (ghostSpawnLocations[2].x >= 0)
-        {
-            // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
-            GameObject pinky = Instantiate(pinkyPrefab);
-            levelGameObjects.Add(pinky);
-            pinky.transform.position = ghostSpawnLocations[0];
-            // pinky.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[2]
-        }
-        if (ghostSpawnLocations[3].x >= 0)
-        {
-            // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
-            GameObject clyde = Instantiate(clydePrefab);
-            levelGameObjects.Add(clyde);
-            clyde.transform.position = ghostSpawnLocations[0];
-            // clyde.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[3]
-        }
-        for (int i = 0; i < dotLocations.Count; i++)
-        {
-            GameObject dot = Instantiate(dotPrefab);
-            levelGameObjects.Add(dot);
-            dot.transform.position = dotLocations[i];
-        }
-        for (int i = 0; i < bigDotLocations.Count; i++)
-        {
-            GameObject bigDot = Instantiate(bigDotPrefab);
-            levelGameObjects.Add(bigDot);
-            bigDot.transform.position = bigDotLocations[i];
-        }
-        for (int i = 0; i < cherryLocations.Count; i++)
-        {
-            GameObject cherry = Instantiate(cherryPrefab);
-            levelGameObjects.Add(cherry);
-            cherry.transform.position = cherryLocations[i];
-        }
+    /*
+    // now spawn new ones and add them to the levelgameobjects list:
+    GameObject pacman = Instantiate(pacmanPrefab);
+    levelGameObjects.Add(pacman);
+    // set the pacman transform and orientation etc:
+    pacman.transform.position = pacmanSpawnLocation;
+    // etc: pacman.orientation = pacmanSpawnOrientation etc.
 
-        */
+    if (ghostSpawnLocations[0].x >= 0)
+    {
+        // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
+        GameObject inky = Instantiate(inkyPrefab);
+        levelGameObjects.Add(inky);
+        inky.transform.position = ghostSpawnLocations[0];
+        // inky.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[0]
     }
+    if (ghostSpawnLocations[1].x >= 0)
+    {
+        // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
+        GameObject blinky = Instantiate(blinkyPrefab);
+        levelGameObjects.Add(blinky);
+        blinky.transform.position = ghostSpawnLocations[0];
+        // blinky.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[1]
+    }
+    if (ghostSpawnLocations[2].x >= 0)
+    {
+        // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
+        GameObject pinky = Instantiate(pinkyPrefab);
+        levelGameObjects.Add(pinky);
+        pinky.transform.position = ghostSpawnLocations[0];
+        // pinky.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[2]
+    }
+    if (ghostSpawnLocations[3].x >= 0)
+    {
+        // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
+        GameObject clyde = Instantiate(clydePrefab);
+        levelGameObjects.Add(clyde);
+        clyde.transform.position = ghostSpawnLocations[0];
+        // clyde.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[3]
+    }
+    for (int i = 0; i < dotLocations.Count; i++)
+    {
+        GameObject dot = Instantiate(dotPrefab);
+        levelGameObjects.Add(dot);
+        dot.transform.position = dotLocations[i];
+    }
+    for (int i = 0; i < bigDotLocations.Count; i++)
+    {
+        GameObject bigDot = Instantiate(bigDotPrefab);
+        levelGameObjects.Add(bigDot);
+        bigDot.transform.position = bigDotLocations[i];
+    }
+    for (int i = 0; i < cherryLocations.Count; i++)
+    {
+        GameObject cherry = Instantiate(cherryPrefab);
+        levelGameObjects.Add(cherry);
+        cherry.transform.position = cherryLocations[i];
+    }
+
+    */
+}
 	
 	// Update is called once per frame
 	void Update () {
@@ -437,6 +519,23 @@ public class LevelManager : MonoBehaviour {
         } else if (Input.GetKeyDown(KeyCode.R))
         {
             ReloadLevel();
+        }
+        
+
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            // refresh the game and reset the highscore
+            HighScore = 0;
+            PlayerPrefs.DeleteKey("HighScore");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad5))
+        {
+            AddPoints(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad8))
+        {
+            HighScore += 1;
         }
 	}
 
