@@ -21,6 +21,8 @@ public class LevelManager : MonoBehaviour {
 
     [SerializeField]
     private string[] defaultLevelFilenames;
+    [SerializeField]
+    private int cherryPointsSpawnLevel = 50;
 
     [SerializeField]
     private Tilemap levelTilemap;
@@ -83,6 +85,8 @@ public class LevelManager : MonoBehaviour {
     private int highScore;
     private int numLives;
     private List<GameObject> levelGameObjects = new List<GameObject>(); // these get destroyed and remade every time the level is reloaded.
+    private GameObject cherryGameObject;
+    private bool hasSpawnedCherry = false; // so that you don't spawn it multiple times
 
     private LevelLoader levelLoader;
 
@@ -432,6 +436,10 @@ public class LevelManager : MonoBehaviour {
             HighScore = Points;
             PlayerPrefs.SetInt("HighScore", highScore);
         }
+        if (Points >= cherryPointsSpawnLevel && !hasSpawnedCherry && levelHasCherry)
+        {
+            cherryGameObject.SetActive(true);
+        }
     }
 
     void ReloadLevel()
@@ -447,6 +455,7 @@ public class LevelManager : MonoBehaviour {
         currentGhostKills = 0;
         levelTime = 0;
         numLives = 2;
+        hasSpawnedCherry = false;
 
 
         /*
@@ -506,6 +515,8 @@ public class LevelManager : MonoBehaviour {
         {
             GameObject cherry = Instantiate(cherryPrefab);
             levelGameObjects.Add(cherry);
+            cherry.SetActive(false);
+            cherryGameObject = cherry;
             cherry.transform.position = cherryLocation + .5f * Vector2.one;
         }
     }
