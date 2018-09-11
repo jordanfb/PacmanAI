@@ -20,6 +20,9 @@ public class LevelManager : MonoBehaviour {
     // we may do other directions if we decide we want them...
 
     [SerializeField]
+    private string[] defaultLevelFilenames;
+
+    [SerializeField]
     private Tilemap levelTilemap;
     [SerializeField]
     private List<char> tileKeys; // each of these are the keys for the tiles in the tiles list. Make sure to keep them in line or bad things will happen :(
@@ -67,10 +70,12 @@ public class LevelManager : MonoBehaviour {
     private SpawnOrientation[] ghostSpawnOrientations;
     private List<Vector2> dotLocations;
     private List<Vector2> bigDotLocations;
-    private List<Vector2> cherryLocations;
+    private Vector2 cherryLocation;
+    private bool levelHasCherry = false;
     private int levelWidth;
     private int levelHeight;
 
+    private int levelLoaded = 0;
     private int points;
     private int ghostKills;
     private int currentGhostKills;
@@ -163,9 +168,9 @@ public class LevelManager : MonoBehaviour {
         return bigDotLocations;
     }
 
-    public List<Vector2> GetCherryLocations()
+    public Vector2 GetCherryLocations()
     {
-        return cherryLocations;
+        return cherryLocation;
     }
 
     public int GetLevelWidth()
@@ -189,7 +194,9 @@ public class LevelManager : MonoBehaviour {
         int[] numGhostSpawnLocations = new int[4];
         dotLocations = new List<Vector2>();
         bigDotLocations = new List<Vector2>();
-        cherryLocations = new List<Vector2>();
+        int numCherrySpawnLocations = 0; // for averaging the position
+        cherryLocation = new Vector2();
+        levelHasCherry = false;
         levelHeight = isWalkableArray.Count;
         levelWidth = isWalkableArray[0].Count;
         if (useTileArray)
@@ -304,7 +311,9 @@ public class LevelManager : MonoBehaviour {
                     } else if (currentTileChar == '&')
                     {
                         // get it? it's twisty like a cherry
-                        cherryLocations.Add(new Vector2(x, y));
+                        numCherrySpawnLocations++;
+                        levelHasCherry = true;
+                        cherryLocation += new Vector2(x, y);
                         currentTileChar = ' ';
                     }
 
@@ -324,6 +333,7 @@ public class LevelManager : MonoBehaviour {
         
         // now average the spawn locations to get them located correctly:
         pacmanSpawnLocation /= numPacmanSpawnLocations;
+        cherryLocation /= numCherrySpawnLocations;
         for (int i = 0; i < ghostSpawnLocations.Length; i++)
         {
             ghostSpawnLocations[i] /= numGhostSpawnLocations[i];
@@ -491,7 +501,7 @@ public class LevelManager : MonoBehaviour {
         levelGameObjects.Add(bigDot);
         bigDot.transform.position = bigDotLocations[i];
     }
-    for (int i = 0; i < cherryLocations.Count; i++)
+    for (int i = 0; i < cherryLocation.Count; i++)
     {
         GameObject cherry = Instantiate(cherryPrefab);
         levelGameObjects.Add(cherry);
@@ -515,11 +525,7 @@ public class LevelManager : MonoBehaviour {
             SetTilemap(true);
             ReloadLevel();
         }
-        else if (Input.GetKeyDown(KeyCode.L))
-        {
-            // load it from the level loader's contents
-            LoadFromLevelLoader();
-        } else if (Input.GetKeyDown(KeyCode.R))
+        else if (Input.GetKeyDown(KeyCode.R))
         {
             ReloadLevel();
         }
@@ -530,6 +536,15 @@ public class LevelManager : MonoBehaviour {
             // refresh the game and reset the highscore
             HighScore = 0;
             PlayerPrefs.DeleteKey("HighScore");
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            // swap the level to load
+            levelLoaded++;
+            levelLoaded %= defaultLevelFilenames.Length;
+            levelLoader.ReadFile(Application.dataPath + defaultLevelFilenames[levelLoaded]);
+            LoadFromLevelLoader();
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad5))

@@ -259,6 +259,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25827276450f1fe4487221342c6b6880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultLevelFilenames:
+  - /Levels/level1-1.txt
+  - /Levels/gameai.txt
+  - /Levels/jordan.txt
   levelTilemap: {fileID: 2093684467}
   tileKeys: 200023006100410064004400650045006600460067004700680048006a004a006b004b006c004c006d004d006e004e006f004f0071005100720052007400540075005500760056007700570078005800790059007a005a00
   tiles:
