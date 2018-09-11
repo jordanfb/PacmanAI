@@ -315,9 +315,11 @@ MonoBehaviour:
   blinkyPrefab: {fileID: 0}
   pinkyPrefab: {fileID: 0}
   clydePrefab: {fileID: 0}
-  dotPrefab: {fileID: 0}
-  bigDotPrefab: {fileID: 0}
-  cherryPrefab: {fileID: 0}
+  dotPrefab: {fileID: 1096678510745020, guid: 3ab3e1fea8725c648979653e0b9a7533, type: 2}
+  bigDotPrefab: {fileID: 1314628386898644, guid: 70c63b809f0469c4f862d4e688d24a87,
+    type: 2}
+  cherryPrefab: {fileID: 1260731019518242, guid: ca380ca2f87bd3b488f642cdc6498cf0,
+    type: 2}
   levelCamera: {fileID: 519420031}
   UIScreenCoveragePercent: {x: 0.4, y: 0.1}
   UIYOffset: 0.025

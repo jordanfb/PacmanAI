@@ -489,26 +489,25 @@ public class LevelManager : MonoBehaviour {
         clyde.transform.position = ghostSpawnLocations[0];
         // clyde.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[3]
     }
+    */
     for (int i = 0; i < dotLocations.Count; i++)
     {
         GameObject dot = Instantiate(dotPrefab);
         levelGameObjects.Add(dot);
-        dot.transform.position = dotLocations[i];
+        dot.transform.position = dotLocations[i] + .5f * Vector2.one;
     }
     for (int i = 0; i < bigDotLocations.Count; i++)
     {
         GameObject bigDot = Instantiate(bigDotPrefab);
         levelGameObjects.Add(bigDot);
-        bigDot.transform.position = bigDotLocations[i];
+        bigDot.transform.position = bigDotLocations[i] + .5f * Vector2.one;
     }
     for (int i = 0; i < cherryLocation.Count; i++)
     {
         GameObject cherry = Instantiate(cherryPrefab);
         levelGameObjects.Add(cherry);
-        cherry.transform.position = cherryLocations[i];
+        cherry.transform.position = cherryLocations[i] + .5f*Vector2.one;
     }
-
-    */
 }
 	
 	// Update is called once per frame

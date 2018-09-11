@@ -1,7 +1,7 @@
 WaaaaaaaaaaaamnaaaaaaaaaaaaD
 v............Hh............V
 v.wGGd.wGGGd.Hh.wGGGd.wGGd.V
-v.H  h.H   h.Hh.H   h.H  h.V
+v*H  h.H   h.Hh.H   h.H  h*V
 v.fgge.fggge.fe.fggge.fgge.V
 v..........................V
 v.wGGd.wd.wGGGGGGd.wd.wGGd.V
@@ -17,10 +17,10 @@ YAAAAd.wd V      v wd.wAAAAZ
      v.Hh Uaaaaaat Hh.V     
      v.Hh          Hh.V     
      v.Hh wGGGGGGd Hh.V     
-Waaaae.fe.fggjrgge.fe.faaaaD
+Waaaae.fe fggjrgge fe.faaaaD
 v............Hh............V
 v.wGGd.wGGGd.Hh.wGGGd.wGGd.V
-v.fgjh.fggge.fe.fggge.Hrge.V
+v*fgjh.fggge.fe.fggge.Hrge*V
 v...Hh.......SS.......Hh...V
 OGd.Hh.wd.wGGGGGGd.wd.Hh.wGQ
 oge.fe.Hh.fggjrgge.Hh.fe.fgq
