@@ -458,21 +458,20 @@ public class LevelManager : MonoBehaviour {
         hasSpawnedCherry = false;
 
 
-        /*
         // now spawn new ones and add them to the levelgameobjects list:
         GameObject pacman = Instantiate(pacmanPrefab);
         levelGameObjects.Add(pacman);
         // set the pacman transform and orientation etc:
         pacman.transform.position = pacmanSpawnLocation;
         // etc: pacman.orientation = pacmanSpawnOrientation etc.
-
         if (ghostSpawnLocations[0].x >= 0)
         {
             // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
             GameObject inky = Instantiate(inkyPrefab);
             levelGameObjects.Add(inky);
             inky.transform.position = ghostSpawnLocations[0];
-            // inky.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[0]
+            inky.transform.rotation = Quaternion.Euler(0, 0, 0); // set the orientation based on the ghostSpawnOrientations[0]
+            Debug.Log("inky added");
         }
         if (ghostSpawnLocations[1].x >= 0)
         {
@@ -480,7 +479,8 @@ public class LevelManager : MonoBehaviour {
             GameObject blinky = Instantiate(blinkyPrefab);
             levelGameObjects.Add(blinky);
             blinky.transform.position = ghostSpawnLocations[0];
-            // blinky.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[1]
+            blinky.transform.rotation = Quaternion.Euler(0, 0, 0); // set the orientation based on the ghostSpawnOrientations[1]
+            Debug.Log("blinky added");
         }
         if (ghostSpawnLocations[2].x >= 0)
         {
@@ -488,7 +488,8 @@ public class LevelManager : MonoBehaviour {
             GameObject pinky = Instantiate(pinkyPrefab);
             levelGameObjects.Add(pinky);
             pinky.transform.position = ghostSpawnLocations[0];
-            // pinky.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[2]
+            pinky.transform.rotation = Quaternion.Euler(0, 0, 0); // set the orientation based on the ghostSpawnOrientations[2]
+            Debug.Log("pinky added");
         }
         if (ghostSpawnLocations[3].x >= 0)
         {
@@ -496,9 +497,10 @@ public class LevelManager : MonoBehaviour {
             GameObject clyde = Instantiate(clydePrefab);
             levelGameObjects.Add(clyde);
             clyde.transform.position = ghostSpawnLocations[0];
-            // clyde.transform.rotation = Quaternion.Euler(0, 0, 0) // set the orientation based on the ghostSpawnOrientations[3]
+            clyde.transform.rotation = Quaternion.Euler(0, 0, 0); // set the orientation based on the ghostSpawnOrientations[3]
+            Debug.Log("clyde added");
         }
-        */
+        
         for (int i = 0; i < dotLocations.Count; i++)
         {
             GameObject dot = Instantiate(dotPrefab);

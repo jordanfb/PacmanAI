@@ -311,11 +311,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bb68daef36fdd214886162a9357683e0, type: 2}
   - {fileID: 11400000, guid: 2ab4bdad65867b2418e13a339a5ade4e, type: 2}
   - {fileID: 11400000, guid: 18d557af7502d4346887ab8eded7bb81, type: 2}
-  pacmanPrefab: {fileID: 0}
-  inkyPrefab: {fileID: 0}
-  blinkyPrefab: {fileID: 0}
-  pinkyPrefab: {fileID: 0}
-  clydePrefab: {fileID: 0}
+  pacmanPrefab: {fileID: 1553430377502054, guid: a21dff32eb66a844a9ef946e5988e494,
+    type: 2}
+  inkyPrefab: {fileID: 1221208090266720, guid: 74862567bc4778f419ba51a4a7b3eaf8, type: 2}
+  blinkyPrefab: {fileID: 1681008171077734, guid: 2d2bcfaf51866814dac390edfa44a958,
+    type: 2}
+  pinkyPrefab: {fileID: 1028608826584124, guid: bc39c353c4dc14f41b73b1e5cba2c7ba,
+    type: 2}
+  clydePrefab: {fileID: 1727273393774786, guid: 4cd63e362a869064a96c3f36900842c9,
+    type: 2}
   dotPrefab: {fileID: 1096678510745020, guid: 3ab3e1fea8725c648979653e0b9a7533, type: 2}
   bigDotPrefab: {fileID: 1314628386898644, guid: 70c63b809f0469c4f862d4e688d24a87,
     type: 2}
