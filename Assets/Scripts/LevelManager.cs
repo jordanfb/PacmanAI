@@ -99,6 +99,7 @@ public class LevelManager : MonoBehaviour {
     private int highScore;
     private int numLives;
     private List<GameObject> levelGameObjects = new List<GameObject>(); // these get destroyed and remade every time the level is reloaded.
+    private List<GameObject> resetableGameObjects = new List<GameObject>(); // these are the ghosts and pacman which get reset when pacman dies
     private GameObject cherryGameObject;
     private bool hasSpawnedCherry = false; // so that you don't spawn it multiple times
 
@@ -473,7 +474,6 @@ public class LevelManager : MonoBehaviour {
         numLives--;
         if (numLives >= 0)
         {
-            Debug.Log("HERE");
             ReloadLevel();
         } else
         {
@@ -488,27 +488,35 @@ public class LevelManager : MonoBehaviour {
         scoreDisplayParent.SetActive(false);
         Time.timeScale = 1;
         // start the countdown
-
-        // this destroys all the gameobjects created and resets the level
-        for (int i = 0; i < levelGameObjects.Count; i++)
-        {
-            Destroy(levelGameObjects[i]);
-        }
-        levelGameObjects = new List<GameObject>();
         if (resetPoints)
         {
+            // this destroys all the gameobjects created and resets the level
+            for (int i = 0; i < levelGameObjects.Count; i++)
+            {
+                Destroy(levelGameObjects[i]);
+            }
+            levelGameObjects = new List<GameObject>();
+
             Points = 0;
             ghostKills = 0;
             levelTime = 0;
             numLives = 2;
+            hasSpawnedCherry = false;
         }
+
+        // reset the ghosts and pacman
+        for (int i = 0; i < resetableGameObjects.Count; i++)
+        {
+            Destroy(resetableGameObjects[i]);
+        }
+        resetableGameObjects = new List<GameObject>();
+
         currentGhostKills = 0;
-        hasSpawnedCherry = false;
 
 
         // now spawn new ones and add them to the levelgameobjects list:
         GameObject pacman = Instantiate(pacmanPrefab);
-        levelGameObjects.Add(pacman);
+        resetableGameObjects.Add(pacman);
         // set the pacman transform and orientation etc:
         pacman.GetComponent<PacmanMovement>().SetLevelManager(this, pacmanSpawnLocation, pacmanSpawnOrientation);
 
@@ -516,7 +524,7 @@ public class LevelManager : MonoBehaviour {
         {
             // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
             GameObject inky = Instantiate(inkyPrefab);
-            levelGameObjects.Add(inky);
+            resetableGameObjects.Add(inky);
             inky.GetComponent<GhostMovement>().SetLevelManager(this, ghostSpawnLocations[0], ghostSpawnOrientations[0]);
             Debug.Log("inky added");
         }
@@ -524,7 +532,7 @@ public class LevelManager : MonoBehaviour {
         {
             // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
             GameObject blinky = Instantiate(blinkyPrefab);
-            levelGameObjects.Add(blinky);
+            resetableGameObjects.Add(blinky);
             blinky.GetComponent<GhostMovement>().SetLevelManager(this, ghostSpawnLocations[1], ghostSpawnOrientations[1]);
             Debug.Log("blinky added");
         }
@@ -532,7 +540,7 @@ public class LevelManager : MonoBehaviour {
         {
             // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
             GameObject pinky = Instantiate(pinkyPrefab);
-            levelGameObjects.Add(pinky);
+            resetableGameObjects.Add(pinky);
             pinky.GetComponent<GhostMovement>().SetLevelManager(this, ghostSpawnLocations[2], ghostSpawnOrientations[2]);
             Debug.Log("pinky added");
         }
@@ -540,30 +548,32 @@ public class LevelManager : MonoBehaviour {
         {
             // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
             GameObject clyde = Instantiate(clydePrefab);
-            levelGameObjects.Add(clyde);
+            resetableGameObjects.Add(clyde);
             clyde.GetComponent<GhostMovement>().SetLevelManager(this, ghostSpawnLocations[3], ghostSpawnOrientations[3]);
             Debug.Log("clyde added");
         }
-        
-        for (int i = 0; i < dotLocations.Count; i++)
+        if (resetPoints)
         {
-            GameObject dot = Instantiate(dotPrefab);
-            levelGameObjects.Add(dot);
-            dot.transform.position = dotLocations[i];
-        }
-        for (int i = 0; i < bigDotLocations.Count; i++)
-        {
-            GameObject bigDot = Instantiate(bigDotPrefab);
-            levelGameObjects.Add(bigDot);
-            bigDot.transform.position = bigDotLocations[i];
-        }
-        if (levelHasCherry)
-        {
-            GameObject cherry = Instantiate(cherryPrefab);
-            levelGameObjects.Add(cherry);
-            cherry.SetActive(false);
-            cherryGameObject = cherry;
-            cherry.transform.position = cherryLocation;
+            for (int i = 0; i < dotLocations.Count; i++)
+            {
+                GameObject dot = Instantiate(dotPrefab);
+                levelGameObjects.Add(dot);
+                dot.transform.position = dotLocations[i];
+            }
+            for (int i = 0; i < bigDotLocations.Count; i++)
+            {
+                GameObject bigDot = Instantiate(bigDotPrefab);
+                levelGameObjects.Add(bigDot);
+                bigDot.transform.position = bigDotLocations[i];
+            }
+            if (levelHasCherry)
+            {
+                GameObject cherry = Instantiate(cherryPrefab);
+                levelGameObjects.Add(cherry);
+                cherry.SetActive(false);
+                cherryGameObject = cherry;
+                cherry.transform.position = cherryLocation;
+            }
         }
     }
 
