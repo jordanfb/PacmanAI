@@ -205,10 +205,11 @@ public class LevelManager : MonoBehaviour {
         levelHasCherry = false;
         levelHeight = isWalkableArray.Count;
         levelWidth = isWalkableArray[0].Count;
+        bool[] isGhostInLevel = new bool[4];
         if (useTileArray)
         {
             pacmanSpawnLocation = Vector2Int.zero;
-            ghostSpawnLocations = new Vector2[] { -Vector2.one, -Vector2.one, -Vector2.one, -Vector2.one };
+            ghostSpawnLocations = new Vector2[4];
             ghostSpawnOrientations = new SpawnOrientation[] { SpawnOrientation.North, SpawnOrientation.North, SpawnOrientation.North, SpawnOrientation.North };
         }
         levelTilemap.ClearAllTiles();
@@ -252,6 +253,7 @@ public class LevelManager : MonoBehaviour {
                         currentTileChar = ' '; // make it a floor
                         ghostSpawnLocations[0] += new Vector2(x, y);
                         numGhostSpawnLocations[0]++; // so we can average the position later
+                        isGhostInLevel[0] = true;
                         if (currentTileChar == 'I')
                         {
                             ghostSpawnOrientations[0] = SpawnOrientation.North;
@@ -266,6 +268,7 @@ public class LevelManager : MonoBehaviour {
                         currentTileChar = ' '; // make it a floor
                         ghostSpawnLocations[1] += new Vector2(x, y);
                         numGhostSpawnLocations[1]++; // so we can average the position later
+                        isGhostInLevel[1] = true;
                         if (currentTileChar == 'B')
                         {
                             ghostSpawnOrientations[1] = SpawnOrientation.North;
@@ -279,6 +282,7 @@ public class LevelManager : MonoBehaviour {
                     {
                         currentTileChar = ' '; // make it a floor
                         ghostSpawnLocations[2] += new Vector2(x, y);
+                        isGhostInLevel[2] = true;
                         numGhostSpawnLocations[2]++; // so we can average the position later
                         if (currentTileChar == 'P')
                         {
@@ -293,6 +297,7 @@ public class LevelManager : MonoBehaviour {
                     {
                         currentTileChar = ' '; // make it a floor
                         ghostSpawnLocations[3] += new Vector2(x, y);
+                        isGhostInLevel[3] = true;
                         numGhostSpawnLocations[3]++; // so we can average the position later
                         if (currentTileChar == 'C')
                         {
@@ -342,7 +347,10 @@ public class LevelManager : MonoBehaviour {
         cherryLocation /= numCherrySpawnLocations;
         for (int i = 0; i < ghostSpawnLocations.Length; i++)
         {
-            ghostSpawnLocations[i] /= numGhostSpawnLocations[i];
+            if (isGhostInLevel[i])
+                ghostSpawnLocations[i] /= numGhostSpawnLocations[i];
+            else
+                ghostSpawnLocations[i] = -Vector2.one; // put it off the map so that the level knows not to spawn it in
         }
 
         // set the camera orthographic size to encompas the width and height of the level
