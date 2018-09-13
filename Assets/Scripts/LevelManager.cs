@@ -94,7 +94,8 @@ public class LevelManager : MonoBehaviour {
     void Start () {
         if (PlayerPrefs.HasKey("HighScore"))
         {
-            HighScore = PlayerPrefs.GetInt("HighScore");
+            HighScore = PlayerPrefs.GetInt("HighScoreLevel" + levelLoaded);
+
         }
         else
         {
@@ -444,7 +445,7 @@ public class LevelManager : MonoBehaviour {
         if (Points > highScore)
         {
             HighScore = Points;
-            PlayerPrefs.SetInt("HighScore", highScore);
+            PlayerPrefs.SetInt("HighScoreLevel"+levelLoaded, highScore);
         }
         if (Points >= cherryPointsSpawnLevel && !hasSpawnedCherry && levelHasCherry)
         {
@@ -554,7 +555,7 @@ public class LevelManager : MonoBehaviour {
         {
             // refresh the game and reset the highscore
             HighScore = 0;
-            PlayerPrefs.DeleteKey("HighScore");
+            PlayerPrefs.DeleteAll();
         }
 
         if (Input.GetKeyDown(KeyCode.L))
@@ -562,6 +563,7 @@ public class LevelManager : MonoBehaviour {
             // swap the level to load
             levelLoaded++;
             levelLoaded %= defaultLevelFilenames.Length;
+            HighScore = PlayerPrefs.GetInt("HighScoreLevel" + levelLoaded);
             levelLoader.ReadFile(Application.dataPath + defaultLevelFilenames[levelLoaded]);
             LoadFromLevelLoader();
         }
