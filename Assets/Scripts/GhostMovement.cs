@@ -13,6 +13,9 @@ public class GhostMovement : CharacterMovement {
     [SerializeField]
     private GameObject eyesRight;
 
+
+    private bool collidedWithGhost = false; // this is for turning around when the ghosts collide
+
 	// Use this for initialization
 	void Start () {
 	}
@@ -122,6 +125,24 @@ public class GhostMovement : CharacterMovement {
         if (collision.gameObject.layer == LayerMask.NameToLayer("warp"))
         {
             //handle warp stuff
+        } else if (collision.gameObject.layer == LayerMask.NameToLayer("ghost"))
+        {
+            Debug.Log(collidedWithGhost);
+            if (!collidedWithGhost)
+            {
+                // turn around
+                Debug.Log("turned around");
+                SetGoalDirection(-movementDirection);
+            }
+            collidedWithGhost = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("ghost"))
+        {
+            collidedWithGhost = false;
         }
     }
 }

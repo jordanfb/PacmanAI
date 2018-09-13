@@ -109,8 +109,14 @@ public class PacmanMovement : CharacterMovement {
             else
             {
                 // collided with a big dot
-                levelManager.AddPoints(1); // for now just do the same as regular dots
-                Debug.Log("Collided with a big dot");
+                if (levelManager.bigDotsSpecial)
+                {
+                    levelManager.AddPoints(5); // give 5 times the points like in regular pacman I guess, even though cherries are 100...
+                }
+                else
+                {
+                    levelManager.AddPoints(1); // for now just do the same as regular dots
+                }
             }
             collision.gameObject.SetActive(false);
         }
@@ -125,6 +131,7 @@ public class PacmanMovement : CharacterMovement {
         else if (collision.gameObject.layer == LayerMask.NameToLayer("ghost"))
         {
             //lose a life
+            levelManager.PacmanDied();
         }
         else if (collision.gameObject.layer == LayerMask.NameToLayer("warp"))
         {

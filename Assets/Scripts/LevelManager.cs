@@ -24,12 +24,26 @@ public class LevelManager : MonoBehaviour {
     [SerializeField]
     private int cherryPointsSpawnLevel = 50;
 
+    public bool ghostsCollideWithEachother = true;
+    public bool bigDotsSpecial = false;
+
     [SerializeField]
     private Tilemap levelTilemap;
     [SerializeField]
     private List<char> tileKeys; // each of these are the keys for the tiles in the tiles list. Make sure to keep them in line or bad things will happen :(
     [SerializeField]
     private List<Tile> tiles; // indexed by number for now. We'll also have to have special tile numbers that represent special things like spawning, dots, and ghost spawn stuff.
+
+    [Space]
+    [SerializeField]
+    private GameObject scoreDisplayParent;
+    [SerializeField]
+    private Text scoreDisplayText;
+    [SerializeField]
+    private GameObject coundownParent;
+    [SerializeField]
+    private Text countdownText;
+
 
     [Space]
     [SerializeField]
@@ -435,7 +449,7 @@ public class LevelManager : MonoBehaviour {
     {
         SetMap(levelLoader.pacMov, levelLoader.tilecharArray);
         SetTilemap(true);
-        ReloadLevel();
+        ReloadLevel(true);
     }
 
     public void AddPoints(int n)
@@ -454,19 +468,41 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
-    void ReloadLevel()
+    public void PacmanDied()
     {
+        numLives--;
+        if (numLives >= 0)
+        {
+            Debug.Log("HERE");
+            ReloadLevel();
+        } else
+        {
+            Time.timeScale = 0;
+            scoreDisplayParent.SetActive(true);
+            scoreDisplayText.text = "Score:\n" + points.ToString("00000");
+        }
+    }
+
+    public void ReloadLevel(bool resetPoints = false)
+    {
+        scoreDisplayParent.SetActive(false);
+        Time.timeScale = 1;
+        // start the countdown
+
         // this destroys all the gameobjects created and resets the level
         for (int i = 0; i < levelGameObjects.Count; i++)
         {
             Destroy(levelGameObjects[i]);
         }
         levelGameObjects = new List<GameObject>();
-        Points = 0;
-        ghostKills = 0;
+        if (resetPoints)
+        {
+            Points = 0;
+            ghostKills = 0;
+            levelTime = 0;
+            numLives = 2;
+        }
         currentGhostKills = 0;
-        levelTime = 0;
-        numLives = 2;
         hasSpawnedCherry = false;
 
 
@@ -530,6 +566,16 @@ public class LevelManager : MonoBehaviour {
             cherry.transform.position = cherryLocation;
         }
     }
+
+    public void NextLevel()
+    {
+        // swap the level to load
+        levelLoaded++;
+        levelLoaded %= defaultLevelFilenames.Length;
+        HighScore = PlayerPrefs.GetInt("HighScoreLevel" + levelLoaded);
+        levelLoader.ReadFile(Application.dataPath + defaultLevelFilenames[levelLoaded]);
+        LoadFromLevelLoader();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -537,17 +583,17 @@ public class LevelManager : MonoBehaviour {
         {
             CreateRandomIsWallList();
             SetTilemap(true);
-            ReloadLevel();
+            ReloadLevel(true);
         }
         else if (Input.GetKeyDown(KeyCode.I))
         {
             CreateSquareMap();
             SetTilemap(true);
-            ReloadLevel();
+            ReloadLevel(true);
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
-            ReloadLevel();
+            ReloadLevel(true);
         }
         
 
@@ -560,12 +606,7 @@ public class LevelManager : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.L))
         {
-            // swap the level to load
-            levelLoaded++;
-            levelLoaded %= defaultLevelFilenames.Length;
-            HighScore = PlayerPrefs.GetInt("HighScoreLevel" + levelLoaded);
-            levelLoader.ReadFile(Application.dataPath + defaultLevelFilenames[levelLoaded]);
-            LoadFromLevelLoader();
+            NextLevel();
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad5))
