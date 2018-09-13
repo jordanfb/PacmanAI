@@ -99,13 +99,30 @@ public class PacmanMovement : CharacterMovement {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("tell me something nice");
         //dot handling
-        if(collision.gameObject.layer == LayerMask.NameToLayer("dot"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("dot"))
         {
-            levelManager.AddPoints(10);
+            if (collision.gameObject.CompareTag("dot"))
+            {
+                levelManager.AddPoints(1);
+            }
+            else
+            {
+                // collided with a big dot
+                levelManager.AddPoints(1); // for now just do the same as regular dots
+                Debug.Log("Collided with a big dot");
+            }
             collision.gameObject.SetActive(false);
-        } else if (collision.gameObject.layer == LayerMask.NameToLayer("dot"))
+        }
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("fruit"))
+        {
+            if (collision.gameObject.CompareTag("cherry"))
+            {
+                levelManager.AddPoints(100);
+            }
+            collision.gameObject.SetActive(false);
+        }
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("ghost"))
         {
             //lose a life
         }

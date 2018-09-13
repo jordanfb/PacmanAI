@@ -23,13 +23,14 @@ public class CharacterMovement : MonoBehaviour {
     // north east south west
     public Vector2[] allDirections = { new Vector2(0, 1), new Vector2(1, 0), new Vector2(0, -1), new Vector2(-1, 0) };
 
-
     public void SetLevelManager(LevelManager lm, Vector3 pos, LevelManager.SpawnOrientation orientation)
     {
         levelManager = lm;
         transform.position = pos;
         destination = pos;
         currentLocation = pos;
+        SetGoalDirection(allDirections[(int)orientation]);
+        facing = (direction)orientation;
     }
 
     //see if we can move to the next tile
