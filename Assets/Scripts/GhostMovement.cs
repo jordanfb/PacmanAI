@@ -131,7 +131,6 @@ public class GhostMovement : CharacterMovement {
             //handle warp stuff
         } else if (collision.gameObject.layer == LayerMask.NameToLayer("ghost"))
         {
-            Debug.Log(collidedWithGhost);
             if (!collidedWithGhost)
             {
                 // turn around
