@@ -58,35 +58,37 @@ public class PacmanMovement : CharacterMovement {
             if (currentLocation != destination)
             {
                 Vector3 p = Vector3.MoveTowards(transform.position, destination, speed);
-                GetComponent<Rigidbody2D>().MovePosition(p);
+                transform.position = p;
             }
         //if that space doesn't work, try contiuing forward
         } else if (CheckCanMoveNextTile(destination))
         {
+
             if (currentLocation != destination)
             {
                 Vector3 p = Vector3.MoveTowards(transform.position, destination, speed);
-                GetComponent<Rigidbody2D>().MovePosition(p);
+                transform.position = p;
             }
         }
         else //if we can't turn and forward doesn't work, stop
         {
-            GetComponent<Rigidbody2D>().velocity = new Vector3(0, 0, 0);
+            //no change
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("tell me something nice");
         //dot handling
-        if(collision.collider.gameObject.layer == LayerMask.NameToLayer("dot"))
+        if(collision.gameObject.layer == LayerMask.NameToLayer("dot"))
         {
             levelManager.AddPoints(10);
-            collision.collider.gameObject.SetActive(false);
-        } else if (collision.collider.gameObject.layer == LayerMask.NameToLayer("dot"))
+            collision.gameObject.SetActive(false);
+        } else if (collision.gameObject.layer == LayerMask.NameToLayer("dot"))
         {
             //lose a life
         }
-        else if (collision.collider.gameObject.layer == LayerMask.NameToLayer("warp"))
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("warp"))
         {
             //handle warp stuff
         }

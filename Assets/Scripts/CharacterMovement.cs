@@ -19,7 +19,6 @@ public class CharacterMovement : MonoBehaviour {
         levelManager = levelManangerObj.GetComponent<LevelManager>();
         facing = direction.Right;
         destination = currentLocation = transform.position.Round(0);
-
     }
 
     //see if we can move to the next tile

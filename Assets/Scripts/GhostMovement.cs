@@ -26,7 +26,7 @@ public class GhostMovement : CharacterMovement {
             if (currentLocation != destination)
             {
                 Vector3 p = Vector3.MoveTowards(transform.position, destination, speed);
-                GetComponent<Rigidbody2D>().MovePosition(p);
+                transform.position = p;
             }
         }
         else //change direction
@@ -52,7 +52,7 @@ public class GhostMovement : CharacterMovement {
             if (currentLocation != destination)
             {
                 Vector3 p = Vector3.MoveTowards(transform.position, destination, speed);
-                GetComponent<Rigidbody2D>().MovePosition(p);
+                transform.position = p;
             }
         }
     }
@@ -92,9 +92,9 @@ public class GhostMovement : CharacterMovement {
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.collider.gameObject.layer == LayerMask.NameToLayer("warp"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("warp"))
         {
             //handle warp stuff
         }
