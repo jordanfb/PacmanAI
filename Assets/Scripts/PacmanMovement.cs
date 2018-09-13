@@ -9,6 +9,12 @@ public class PacmanMovement : CharacterMovement {
     private float Right = 0;
     private direction nextFacing;
     private bool startedMoving = false;
+    private Animator animator;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     private void Update()
     {
@@ -21,6 +27,13 @@ public class PacmanMovement : CharacterMovement {
             startedMoving = true;
         }
 
+        if (IsMoving())
+        {
+            animator.SetFloat("speed", 1);
+        } else
+        {
+            animator.SetFloat("speed", 0);
+        }
 
         //change direction facing
         switch (facing)
@@ -45,7 +58,7 @@ public class PacmanMovement : CharacterMovement {
 
     private void FixedUpdate()
     {
-        if (startedMoving)
+        if (startedMoving && levelManager.playLevel)
             Move();
     }
 

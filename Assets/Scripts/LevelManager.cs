@@ -26,7 +26,7 @@ public class LevelManager : MonoBehaviour {
 
     public bool ghostsCollideWithEachother = true;
     public bool bigDotsSpecial = false;
-
+    public bool playLevel = false; // this is used to pause everything during the countdown
     [SerializeField]
     private Tilemap levelTilemap;
     [SerializeField]
@@ -40,7 +40,7 @@ public class LevelManager : MonoBehaviour {
     [SerializeField]
     private Text scoreDisplayText;
     [SerializeField]
-    private GameObject coundownParent;
+    private GameObject countdownParent;
     [SerializeField]
     private Text countdownText;
 
@@ -76,6 +76,7 @@ public class LevelManager : MonoBehaviour {
     private Text scoreDisplay;
     [SerializeField]
     private Text highscoreDisplay;
+    private float countDownTime = 4;
 
     private List<List<bool>> isWalkableArray;
     private List<List<char>> tileCharArray = null;
@@ -485,6 +486,9 @@ public class LevelManager : MonoBehaviour {
 
     public void ReloadLevel(bool resetPoints = false)
     {
+        countdownParent.SetActive(true);
+        playLevel = false; // so that the countdown starts
+        countDownTime = 3;
         scoreDisplayParent.SetActive(false);
         Time.timeScale = 1;
         // start the countdown
@@ -605,7 +609,23 @@ public class LevelManager : MonoBehaviour {
         {
             ReloadLevel(true);
         }
-        
+
+        if (countDownTime <= 0 && !playLevel)
+        {
+            playLevel = true;
+            countdownParent.SetActive(false);
+        } else
+        {
+            countDownTime -= Time.deltaTime;
+            if (countDownTime <= 1)
+            {
+                countdownText.text = "GO!";
+            }
+            else
+            {
+                countdownText.text = countDownTime.ToString("0");
+            }
+        }
 
         if (Input.GetKeyDown(KeyCode.F5))
         {

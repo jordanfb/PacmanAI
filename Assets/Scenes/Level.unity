@@ -113,6 +113,81 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &73010238
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 73010239}
+  - component: {fileID: 73010241}
+  - component: {fileID: 73010240}
+  m_Layer: 5
+  m_Name: Countdown
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &73010239
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 73010238}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1481583264}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &73010240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 73010238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 0bb7d599c2e12d449b45cdbe1c9cf227, type: 3}
+    m_FontSize: 48
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 48
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 3
+--- !u!222 &73010241
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 73010238}
+  m_CullTransparentMesh: 0
 --- !u!1 &85391208
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,6 +539,7 @@ MonoBehaviour:
   cherryPointsSpawnLevel: 50
   ghostsCollideWithEachother: 1
   bigDotsSpecial: 0
+  playLevel: 0
   levelTilemap: {fileID: 2093684467}
   tileKeys: 200023006100410064004400650045006600460067004700680048006a004a006b004b006c004c006d004d006e004e006f004f0071005100720052007400540075005500760056007700570078005800790059007a005a00
   tiles:
@@ -513,8 +589,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 18d557af7502d4346887ab8eded7bb81, type: 2}
   scoreDisplayParent: {fileID: 1235028618}
   scoreDisplayText: {fileID: 85391210}
-  coundownParent: {fileID: 0}
-  countdownText: {fileID: 0}
+  countdownParent: {fileID: 73010238}
+  countdownText: {fileID: 73010240}
   pacmanPrefab: {fileID: 1553430377502054, guid: a21dff32eb66a844a9ef946e5988e494,
     type: 2}
   inkyPrefab: {fileID: 1221208090266720, guid: 74862567bc4778f419ba51a4a7b3eaf8, type: 2}
@@ -1169,6 +1245,7 @@ RectTransform:
   - {fileID: 1324247182}
   - {fileID: 972465342}
   - {fileID: 1235028619}
+  - {fileID: 73010239}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

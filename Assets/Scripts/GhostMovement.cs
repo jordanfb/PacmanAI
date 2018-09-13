@@ -62,6 +62,10 @@ public class GhostMovement : CharacterMovement {
 
     private void FixedUpdate()
     {
+        if (!levelManager.playLevel)
+        {
+            return; // don't move if the level isn't playing
+        }
         Move();
         if (IsAtDecisionPoint())
         {
@@ -131,7 +135,6 @@ public class GhostMovement : CharacterMovement {
             if (!collidedWithGhost)
             {
                 // turn around
-                Debug.Log("turned around");
                 SetGoalDirection(-movementDirection);
             }
             collidedWithGhost = true;
