@@ -134,6 +134,8 @@ public class LevelManager : MonoBehaviour {
 
     public bool GetIsTileWalkable(int x, int y)
     {
+        if (x < 0 || x >= levelWidth || y < 0 || y >= levelHeight)
+            return false; // can't walk if it's out of bounds
         return isWalkableArray[y][x];
     }
 
@@ -462,15 +464,14 @@ public class LevelManager : MonoBehaviour {
         GameObject pacman = Instantiate(pacmanPrefab);
         levelGameObjects.Add(pacman);
         // set the pacman transform and orientation etc:
-        pacman.transform.position = pacmanSpawnLocation;
-        // etc: pacman.orientation = pacmanSpawnOrientation etc.
+        pacman.GetComponent<PacmanMovement>().SetLevelManager(this, pacmanSpawnLocation, pacmanSpawnOrientation);
+
         if (ghostSpawnLocations[0].x >= 0)
         {
             // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
             GameObject inky = Instantiate(inkyPrefab);
             levelGameObjects.Add(inky);
-            inky.transform.position = ghostSpawnLocations[0];
-            inky.transform.rotation = Quaternion.Euler(0, 0, 0); // set the orientation based on the ghostSpawnOrientations[0]
+            inky.GetComponent<GhostMovement>().SetLevelManager(this, ghostSpawnLocations[0], ghostSpawnOrientations[0]);
             Debug.Log("inky added");
         }
         if (ghostSpawnLocations[1].x >= 0)
@@ -478,8 +479,7 @@ public class LevelManager : MonoBehaviour {
             // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
             GameObject blinky = Instantiate(blinkyPrefab);
             levelGameObjects.Add(blinky);
-            blinky.transform.position = ghostSpawnLocations[0];
-            blinky.transform.rotation = Quaternion.Euler(0, 0, 0); // set the orientation based on the ghostSpawnOrientations[1]
+            blinky.GetComponent<GhostMovement>().SetLevelManager(this, ghostSpawnLocations[1], ghostSpawnOrientations[1]);
             Debug.Log("blinky added");
         }
         if (ghostSpawnLocations[2].x >= 0)
@@ -487,8 +487,7 @@ public class LevelManager : MonoBehaviour {
             // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
             GameObject pinky = Instantiate(pinkyPrefab);
             levelGameObjects.Add(pinky);
-            pinky.transform.position = ghostSpawnLocations[0];
-            pinky.transform.rotation = Quaternion.Euler(0, 0, 0); // set the orientation based on the ghostSpawnOrientations[2]
+            pinky.GetComponent<GhostMovement>().SetLevelManager(this, ghostSpawnLocations[2], ghostSpawnOrientations[2]);
             Debug.Log("pinky added");
         }
         if (ghostSpawnLocations[3].x >= 0)
@@ -496,8 +495,7 @@ public class LevelManager : MonoBehaviour {
             // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
             GameObject clyde = Instantiate(clydePrefab);
             levelGameObjects.Add(clyde);
-            clyde.transform.position = ghostSpawnLocations[0];
-            clyde.transform.rotation = Quaternion.Euler(0, 0, 0); // set the orientation based on the ghostSpawnOrientations[3]
+            clyde.GetComponent<GhostMovement>().SetLevelManager(this, ghostSpawnLocations[3], ghostSpawnOrientations[3]);
             Debug.Log("clyde added");
         }
         
@@ -505,13 +503,13 @@ public class LevelManager : MonoBehaviour {
         {
             GameObject dot = Instantiate(dotPrefab);
             levelGameObjects.Add(dot);
-            dot.transform.position = dotLocations[i] + .5f * Vector2.one;
+            dot.transform.position = dotLocations[i];
         }
         for (int i = 0; i < bigDotLocations.Count; i++)
         {
             GameObject bigDot = Instantiate(bigDotPrefab);
             levelGameObjects.Add(bigDot);
-            bigDot.transform.position = bigDotLocations[i] + .5f * Vector2.one;
+            bigDot.transform.position = bigDotLocations[i];
         }
         if (levelHasCherry)
         {
@@ -519,7 +517,7 @@ public class LevelManager : MonoBehaviour {
             levelGameObjects.Add(cherry);
             cherry.SetActive(false);
             cherryGameObject = cherry;
-            cherry.transform.position = cherryLocation + .5f * Vector2.one;
+            cherry.transform.position = cherryLocation;
         }
     }
 	

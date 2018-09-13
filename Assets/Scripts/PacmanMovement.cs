@@ -8,6 +8,7 @@ public class PacmanMovement : CharacterMovement {
     private float Up = 0;
     private float Right = 0;
     private direction nextFacing;
+    private bool startedMoving = false;
 
     private void Update()
     {
@@ -24,10 +25,22 @@ public class PacmanMovement : CharacterMovement {
         else if (Right == -1)
             nextFacing = direction.Left;
         //otherwise no change
-        Debug.Log(facing);
+
+        Vector2 inputDir = new Vector2(Right, Up);
+        if (inputDir.SqrMagnitude() > 0 && (inputDir.x == 0 || inputDir.y == 0))
+        {
+            SetGoalDirection(inputDir.normalized);
+            startedMoving = true;
+        }
     }
 
     private void FixedUpdate()
+    {
+        if (startedMoving)
+            Move();
+    }
+
+    /*private void FixedUpdate()
     {
         //change direction facing
         switch (facing)
@@ -63,7 +76,6 @@ public class PacmanMovement : CharacterMovement {
         //if that space doesn't work, try contiuing forward
         } else if (CheckCanMoveNextTile(destination))
         {
-
             if (currentLocation != destination)
             {
                 Vector3 p = Vector3.MoveTowards(transform.position, destination, speed);
@@ -74,7 +86,7 @@ public class PacmanMovement : CharacterMovement {
         {
             //no change
         }
-    }
+    }*/
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

@@ -17,7 +17,7 @@ public class GhostMovement : CharacterMovement {
 	void Start () {
 	}
 
-    private void FixedUpdate()
+    /*private void FixedUpdate()
     {
         //update movement
         Vector3 nextDest = setDestination(facing);
@@ -54,6 +54,28 @@ public class GhostMovement : CharacterMovement {
                 Vector3 p = Vector3.MoveTowards(transform.position, destination, speed);
                 transform.position = p;
             }
+        }
+    }*/
+
+    private void FixedUpdate()
+    {
+        Move();
+        Vector2 dir = Vector2.zero;
+        int choiceDir = Random.Range(0, 4);
+        switch(choiceDir)
+        {
+            case 0:
+                SetGoalDirection(new Vector2(0, 1));
+                break;
+            case 1:
+                SetGoalDirection(new Vector2(0, -1));
+                break;
+            case 2:
+                SetGoalDirection(new Vector2(1, 0));
+                break;
+            case 3:
+                SetGoalDirection(new Vector2(-1, 0));
+                break;
         }
     }
 
