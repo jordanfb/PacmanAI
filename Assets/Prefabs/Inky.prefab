@@ -270,7 +270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31484e2f148bdb641b1fe0f8cdd33dfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 0.1
   facing: 0
   eyesUp: {fileID: 1051513122614918}
   eyesDown: {fileID: 1668133231521098}

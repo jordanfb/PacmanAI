@@ -60,22 +60,25 @@ public class GhostMovement : CharacterMovement {
     private void FixedUpdate()
     {
         Move();
-        Vector2 dir = Vector2.zero;
-        int choiceDir = Random.Range(0, 4);
-        switch(choiceDir)
+        if (IsAtDecisionPoint())
         {
-            case 0:
-                SetGoalDirection(new Vector2(0, 1));
-                break;
-            case 1:
-                SetGoalDirection(new Vector2(0, -1));
-                break;
-            case 2:
-                SetGoalDirection(new Vector2(1, 0));
-                break;
-            case 3:
-                SetGoalDirection(new Vector2(-1, 0));
-                break;
+            // then decide!
+            List<Vector2> choices = new List<Vector2>();
+            bool[] validChoices = GhostValidDirections();
+            for (int i = 0; i < validChoices.Length; i++)
+            {
+                if (validChoices[i])
+                {
+                    choices.Add(allDirections[i]);
+                }
+            }
+            if (choices.Count == 0)
+            {
+                SetGoalDirection(RandomOrthogonalDirection());
+            } else
+            {
+                SetGoalDirection(choices[Random.Range(0, choices.Count)]);
+            }
         }
     }
 

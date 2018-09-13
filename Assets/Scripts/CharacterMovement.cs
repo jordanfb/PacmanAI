@@ -19,6 +19,11 @@ public class CharacterMovement : MonoBehaviour {
 
     private bool atDecisionPoint = false;
 
+    // this is juse because we keep needing all of these and never have them
+    // north east south west
+    public Vector2[] allDirections = { new Vector2(0, 1), new Vector2(1, 0), new Vector2(0, -1), new Vector2(-1, 0) };
+
+
     public void SetLevelManager(LevelManager lm, Vector3 pos, LevelManager.SpawnOrientation orientation)
     {
         levelManager = lm;
@@ -70,13 +75,44 @@ public class CharacterMovement : MonoBehaviour {
     {
         // it returns an array of what directions it can turn at this point.
         // ghosts can't turn backwards but pacman can, but this function doesn't differentiate
-        bool[] dirs = { false, false, false, false };
+        // north east south west
+        bool[] dirs = new bool[4];
+        for (int i = 0; i < 4; i++)
+        {
+            if (CheckCanMoveNextTile(allDirections[i] + (Vector2)transform.position))
+            {
+                dirs[i] = true;
+            }
+        }
         return dirs;
     }
 
     protected bool[] GhostValidDirections()
     {
-        return ValidDirections();
+        // north east south west
+        bool[] dirs = ValidDirections();
+        if (movementDirection.y == 1)
+        {
+            dirs[2] = false; // can't turn around
+        }
+        else if (movementDirection.x == 1)
+        {
+            dirs[3] = false; // can't turn around
+        }
+        else if (movementDirection.y == -1)
+        {
+            dirs[0] = false;
+        }
+        else if (movementDirection.x == -1)
+        {
+            dirs[1] = false; // can't turn around
+        }
+        return dirs;
+    }
+
+    public Vector2 RandomOrthogonalDirection()
+    {
+        return allDirections[Random.Range(0, 4)];
     }
 
     public void SetGoalDirection(Vector2 dir)
@@ -98,13 +134,9 @@ public class CharacterMovement : MonoBehaviour {
          * CheckCanMoveTile and resulting behavior
          * probably more things?
          */
-        atDecisionPoint = false;
 
-        Vector2 currentPos = transform.position;
-        transform.position = Vector2.MoveTowards(currentPos, destination, speed);
-        if ((Vector2)transform.position == destination)
+        if (atDecisionPoint)
         {
-            atDecisionPoint = true;
             // come up with a new destination
             Vector2Int goalDestination = new Vector2Int((int)(transform.position.x + goalDirection.x), (int)(transform.position.y + goalDirection.y));
             if (levelManager.GetIsTileWalkable(goalDestination.x, goalDestination.y))
@@ -126,7 +158,23 @@ public class CharacterMovement : MonoBehaviour {
                     // Just do nothing, the code will return that you're stuck since your destination is the same as your position
                 }
             }
+        } else if (goalDirection == -movementDirection)
+        {
+            // this is for pacman when he changes direction
+            // if it's a valid choice then sure he can go there
+            Vector2Int goalDestination = new Vector2Int((int)(transform.position.x + goalDirection.x), (int)(transform.position.y + goalDirection.y));
+            if (levelManager.GetIsTileWalkable(goalDestination.x, goalDestination.y))
+            {
+                destination = goalDestination;
+                movementDirection = goalDirection;
+            }
         }
+
+
+        // moved the movement down here so that ghosts get a chance to choose where to go
+        Vector2 currentPos = transform.position;
+        transform.position = Vector2.MoveTowards(currentPos, destination, speed);
+        atDecisionPoint = destination == currentPos;
     }
 
     public enum direction
