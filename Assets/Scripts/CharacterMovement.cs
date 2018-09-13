@@ -115,6 +115,11 @@ public class CharacterMovement : MonoBehaviour {
         return allDirections[Random.Range(0, 4)];
     }
 
+    public void SetGoalDirection(direction dir)
+    {
+        goalDirection = allDirections[(int)dir];
+    }
+
     public void SetGoalDirection(Vector2 dir)
     {
         goalDirection = dir;
@@ -170,6 +175,20 @@ public class CharacterMovement : MonoBehaviour {
             }
         }
 
+        // set the direction for art purposes
+        if (movementDirection.y == 1)
+        {
+            facing = direction.Up;
+        } else if (movementDirection.x == 1)
+        {
+            facing = direction.Right;
+        } else if (movementDirection.y == -1)
+        {
+            facing = direction.Down;
+        } else if (movementDirection.x == -1)
+        {
+            facing = direction.Left;
+        }
 
         // moved the movement down here so that ghosts get a chance to choose where to go
         Vector2 currentPos = transform.position;
@@ -179,6 +198,6 @@ public class CharacterMovement : MonoBehaviour {
 
     public enum direction
     {
-        Up, Down, Left, Right
+        Up, Right, Down, Left
     }
 }

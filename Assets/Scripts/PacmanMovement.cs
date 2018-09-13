@@ -14,23 +14,32 @@ public class PacmanMovement : CharacterMovement {
     {
         Up = Input.GetAxis("Vertical");
         Right = Input.GetAxis("Horizontal");
-        //get directional input for one pac-y boi
-        //Vertical axis has priority over horizontal
-        if (Up == 1)
-            nextFacing = direction.Up;
-        else if (Up == -1)
-            nextFacing = direction.Down;
-        else if (Right == 1)
-            nextFacing = direction.Right;
-        else if (Right == -1)
-            nextFacing = direction.Left;
-        //otherwise no change
-
         Vector2 inputDir = new Vector2(Right, Up);
         if (inputDir.SqrMagnitude() > 0 && (inputDir.x == 0 || inputDir.y == 0))
         {
             SetGoalDirection(inputDir.normalized);
             startedMoving = true;
+        }
+
+
+        //change direction facing
+        switch (facing)
+        {
+            case direction.Down:
+                transform.eulerAngles = new Vector3(0, 0, -90);
+                break;
+            case direction.Left:
+                transform.eulerAngles = new Vector3(0, 0, -180);
+                break;
+            case direction.Up:
+                transform.eulerAngles = new Vector3(0, 0, 90);
+                break;
+            case direction.Right:
+                transform.eulerAngles = new Vector3(0, 0, 0);
+                break;
+            default:
+                Debug.Log("BROKE rotation switch case");
+                break;
         }
     }
 
