@@ -448,6 +448,7 @@ public class LevelManager : MonoBehaviour {
         }
         if (Points >= cherryPointsSpawnLevel && !hasSpawnedCherry && levelHasCherry)
         {
+            hasSpawnedCherry = true;
             cherryGameObject.SetActive(true);
         }
     }
