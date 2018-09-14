@@ -232,6 +232,7 @@ public class LevelManager : MonoBehaviour {
         int[] numGhostSpawnLocations = new int[4];
         dotLocations = new List<Vector2>();
         bigDotLocations = new List<Vector2>();
+        warpLocations = new Dictionary<char, Vector2>();
         int numCherrySpawnLocations = 0; // for averaging the position
         cherryLocation = new Vector2();
         levelHasCherry = false;
