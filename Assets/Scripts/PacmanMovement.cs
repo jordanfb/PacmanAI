@@ -117,18 +117,18 @@ public class PacmanMovement : CharacterMovement {
         {
             if (collision.gameObject.CompareTag("dot"))
             {
-                levelManager.AddPoints(1);
+                levelManager.AddPoints(1, 1);
             }
             else
             {
                 // collided with a big dot
                 if (levelManager.bigDotsSpecial)
                 {
-                    levelManager.AddPoints(5); // give 5 times the points like in regular pacman I guess, even though cherries are 100...
+                    levelManager.AddPoints(5, 1); // give 5 times the points like in regular pacman I guess, even though cherries are 100...
                 }
                 else
                 {
-                    levelManager.AddPoints(1); // for now just do the same as regular dots
+                    levelManager.AddPoints(1, 1); // for now just do the same as regular dots
                 }
             }
             collision.gameObject.SetActive(false);

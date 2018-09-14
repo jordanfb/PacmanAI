@@ -25,6 +25,9 @@ public class LevelManager : MonoBehaviour {
     [SerializeField]
     private int cherryPointsSpawnLevel = 50;
 
+    [SerializeField]
+    private TextAsset[] levelTextAssets;
+
     public bool ghostsCollideWithEachother = true;
     public bool bigDotsSpecial = false;
     public bool playLevel = false; // this is used to pause everything during the countdown
@@ -44,7 +47,8 @@ public class LevelManager : MonoBehaviour {
     private GameObject countdownParent;
     [SerializeField]
     private Text countdownText;
-
+    [SerializeField]
+    private GameObject winTextParent;
 
     [Space]
     [SerializeField]
@@ -107,6 +111,7 @@ public class LevelManager : MonoBehaviour {
     private List<GameObject> resetableGameObjects = new List<GameObject>(); // these are the ghosts and pacman which get reset when pacman dies
     private GameObject cherryGameObject;
     private bool hasSpawnedCherry = false; // so that you don't spawn it multiple times
+    private int numDotsEaten = 0;
 
     private LevelLoader levelLoader;
 
@@ -122,6 +127,7 @@ public class LevelManager : MonoBehaviour {
             HighScore = 0;
         }
         levelLoader = GetComponent<LevelLoader>();
+        levelLoader.ReadAsset(levelTextAssets[levelLoaded]);
         LoadFromLevelLoader();
 	}
 
@@ -469,10 +475,11 @@ public class LevelManager : MonoBehaviour {
         ReloadLevel(true);
     }
 
-    public void AddPoints(int n)
+    public void AddPoints(int n, int numDots = 0)
     {
         // add points to this current game of pacman
         Points += n;
+        numDotsEaten += numDots;
         if (Points > highScore)
         {
             HighScore = Points;
@@ -493,10 +500,16 @@ public class LevelManager : MonoBehaviour {
             ReloadLevel();
         } else
         {
-            Time.timeScale = 0;
-            scoreDisplayParent.SetActive(true);
-            scoreDisplayText.text = "Score:\n" + points.ToString("00000");
+            DisplayEndGameText();
         }
+    }
+
+    private void DisplayEndGameText(bool win = false)
+    {
+        Time.timeScale = 0;
+        scoreDisplayParent.SetActive(true);
+        scoreDisplayText.text = "Score:\n" + points.ToString("00000");
+        winTextParent.SetActive(win);
     }
 
     public void ReloadLevel(bool resetPoints = false)
@@ -509,6 +522,7 @@ public class LevelManager : MonoBehaviour {
         // start the countdown
         if (resetPoints)
         {
+            numDotsEaten = 0;
             // this destroys all the gameobjects created and resets the level
             for (int i = 0; i < levelGameObjects.Count; i++)
             {
@@ -609,12 +623,14 @@ public class LevelManager : MonoBehaviour {
         levelLoaded++;
         levelLoaded %= defaultLevelFilenames.Length;
         HighScore = PlayerPrefs.GetInt("HighScoreLevel" + levelLoaded);
-        levelLoader.ReadFile(Application.dataPath + defaultLevelFilenames[levelLoaded]);
+        //levelLoader.ReadFile(Application.dataPath + defaultLevelFilenames[levelLoaded]);
+        levelLoader.ReadAsset(levelTextAssets[levelLoaded]);
         LoadFromLevelLoader();
     }
 	
 	// Update is called once per frame
 	void Update () {
+        /*
 		if (Input.GetKeyDown(KeyCode.O))
         {
             CreateRandomIsWallList();
@@ -627,7 +643,8 @@ public class LevelManager : MonoBehaviour {
             SetTilemap(true);
             ReloadLevel(true);
         }
-        else if (Input.GetKeyDown(KeyCode.R))
+        else */
+        if (Input.GetKeyDown(KeyCode.R))
         {
             ReloadLevel(true);
         }
@@ -649,6 +666,12 @@ public class LevelManager : MonoBehaviour {
             }
         }
 
+        if (numDotsEaten >= dotLocations.Count + bigDotLocations.Count)
+        {
+            // you win!
+            DisplayEndGameText(true);
+        }
+
         if (Input.GetKeyDown(KeyCode.F5))
         {
             // refresh the game and reset the highscore
@@ -660,15 +683,15 @@ public class LevelManager : MonoBehaviour {
         {
             NextLevel();
         }
-
+        /*
         if (Input.GetKeyDown(KeyCode.Keypad5))
         {
-            AddPoints(1);
+            AddPoints(1, 10);
         }
         if (Input.GetKeyDown(KeyCode.Keypad8))
         {
             HighScore += 1;
-        }
+        }*/
 	}
 
     public enum SpawnOrientation // facing that direction
