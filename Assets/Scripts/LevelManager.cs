@@ -340,11 +340,10 @@ public class LevelManager : MonoBehaviour {
                             ghostSpawnOrientations[3] = SpawnOrientation.South;
                         }
                     }
-                    else if (currentTileChar == '1' || currentTileChar == '2' || currentTileChar == '3' || currentTileChar == '4'
-                         || currentTileChar == '5' || currentTileChar == '6' || currentTileChar == '7' || currentTileChar == '8')
+                    else if (currentTileChar == '1' || currentTileChar == '2' || currentTileChar == '3' || currentTileChar == '4' || currentTileChar == '5' || currentTileChar == '6' || currentTileChar == '7' || currentTileChar == '8')
                     {
-                        currentTileChar = ' '; // make it a floor
                         warpLocations.Add(currentTileChar, new Vector2(x, y));
+                        currentTileChar = ' '; // make it a floor  
                     }
                     else if (currentTileChar == '.')
                     {
