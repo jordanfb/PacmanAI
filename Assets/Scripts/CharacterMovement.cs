@@ -18,6 +18,7 @@ public class CharacterMovement : MonoBehaviour {
     // this is a valid position which is where you are moving towards. Whenever you are at an integer position you set this
 
     private bool atDecisionPoint = false;
+    protected bool onWarpTile = false;
 
     // this is juse because we keep needing all of these and never have them
     // north east south west

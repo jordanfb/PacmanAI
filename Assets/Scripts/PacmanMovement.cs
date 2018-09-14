@@ -10,6 +10,7 @@ public class PacmanMovement : CharacterMovement {
     private direction nextFacing;
     private bool startedMoving = false;
     private Animator animator;
+    
 
     private void Start()
     {
@@ -149,35 +150,40 @@ public class PacmanMovement : CharacterMovement {
         else if (collision.gameObject.layer == LayerMask.NameToLayer("warp"))
         {
             //handle warp stuff
+            
             char warpTag = collision.gameObject.tag[0];
             Vector2 targetPosition = currentLocation;
-            switch(warpTag)
+            if(!onWarpTile)
             {
-                case ('1'):
-                    targetPosition = levelManager.GetWarpByKey('2');
-                    break;
-                case ('2'):
-                    targetPosition = levelManager.GetWarpByKey('1');
-                    break;
-                case ('3'):
-                    targetPosition = levelManager.GetWarpByKey('4');
-                    break;
-                case ('4'):
-                    targetPosition = levelManager.GetWarpByKey('3');
-                    break;
-                case ('5'):
-                    targetPosition = levelManager.GetWarpByKey('6');
-                    break;
-                case ('6'):
-                    targetPosition = levelManager.GetWarpByKey('5');
-                    break;
-                case ('7'):
-                    targetPosition = levelManager.GetWarpByKey('8');
-                    break;
-                case ('8'):
-                    targetPosition = levelManager.GetWarpByKey('7');
-                    break;
+                switch (warpTag)
+                {
+                    case ('1'):
+                        targetPosition = levelManager.GetWarpByKey('2');
+                        break;
+                    case ('2'):
+                        targetPosition = levelManager.GetWarpByKey('1');
+                        break;
+                    case ('3'):
+                        targetPosition = levelManager.GetWarpByKey('4');
+                        break;
+                    case ('4'):
+                        targetPosition = levelManager.GetWarpByKey('3');
+                        break;
+                    case ('5'):
+                        targetPosition = levelManager.GetWarpByKey('6');
+                        break;
+                    case ('6'):
+                        targetPosition = levelManager.GetWarpByKey('5');
+                        break;
+                    case ('7'):
+                        targetPosition = levelManager.GetWarpByKey('8');
+                        break;
+                    case ('8'):
+                        targetPosition = levelManager.GetWarpByKey('7');
+                        break;
+                }
             }
+            onWarpTile = true;
             destination = transform.position = targetPosition;
             Move();
         }
