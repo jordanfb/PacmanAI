@@ -24,6 +24,9 @@ public class LevelManager : MonoBehaviour {
     [SerializeField]
     private int cherryPointsSpawnLevel = 50;
 
+    [SerializeField]
+    private TextAsset[] levelTextAssets;
+
     public bool ghostsCollideWithEachother = true;
     public bool bigDotsSpecial = false;
     public bool playLevel = false; // this is used to pause everything during the countdown
@@ -120,6 +123,7 @@ public class LevelManager : MonoBehaviour {
             HighScore = 0;
         }
         levelLoader = GetComponent<LevelLoader>();
+        levelLoader.ReadAsset(levelTextAssets[levelLoaded]);
         LoadFromLevelLoader();
 	}
 
@@ -597,7 +601,8 @@ public class LevelManager : MonoBehaviour {
         levelLoaded++;
         levelLoaded %= defaultLevelFilenames.Length;
         HighScore = PlayerPrefs.GetInt("HighScoreLevel" + levelLoaded);
-        levelLoader.ReadFile(Application.dataPath + defaultLevelFilenames[levelLoaded]);
+        //levelLoader.ReadFile(Application.dataPath + defaultLevelFilenames[levelLoaded]);
+        levelLoader.ReadAsset(levelTextAssets[levelLoaded]);
         LoadFromLevelLoader();
     }
 	
