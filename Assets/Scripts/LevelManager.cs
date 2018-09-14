@@ -15,6 +15,7 @@ public class LevelManager : MonoBehaviour {
     // B/b = blinky spawn
     // P/p = pinky spawn
     // C/c = clyde spawn
+    // all numbers are warps
     // uppercase is spawning facing upwards
     // lowercase is spawning facing downwards
     // we may do other directions if we decide we want them...
@@ -46,6 +47,8 @@ public class LevelManager : MonoBehaviour {
 
 
     [Space]
+    [SerializeField]
+    private GameObject warpNodePrefab;
     [SerializeField]
     private GameObject pacmanPrefab;
     [SerializeField]
@@ -87,6 +90,7 @@ public class LevelManager : MonoBehaviour {
     private SpawnOrientation[] ghostSpawnOrientations;
     private List<Vector2> dotLocations;
     private List<Vector2> bigDotLocations;
+    private Dictionary<char, Vector2> warpLocations;
     private Vector2 cherryLocation;
     private bool levelHasCherry = false;
     private int levelWidth;
@@ -154,6 +158,11 @@ public class LevelManager : MonoBehaviour {
         if (x < 0 || x >= levelWidth || y < 0 || y >= levelHeight)
             return false; // can't walk if it's out of bounds
         return isWalkableArray[y][x];
+    }
+
+    public Vector2 GetWarpByKey(char ID)
+    {
+        return warpLocations[ID];
     }
 
     public List<List<bool>> GetIsWalkableArray()
@@ -324,6 +333,12 @@ public class LevelManager : MonoBehaviour {
                         {
                             ghostSpawnOrientations[3] = SpawnOrientation.South;
                         }
+                    }
+                    else if (currentTileChar == '1' || currentTileChar == '2' || currentTileChar == '3' || currentTileChar == '4'
+                         || currentTileChar == '5' || currentTileChar == '6' || currentTileChar == '7' || currentTileChar == '8')
+                    {
+                        currentTileChar = ' '; // make it a floor
+                        warpLocations.Add(currentTileChar, new Vector2(x, y));
                     }
                     else if (currentTileChar == '.')
                     {
@@ -570,6 +585,13 @@ public class LevelManager : MonoBehaviour {
                 levelGameObjects.Add(bigDot);
                 bigDot.transform.position = bigDotLocations[i];
             }
+            foreach (KeyValuePair<char, Vector2> member in warpLocations)
+            {
+                GameObject warpNode = Instantiate(warpNodePrefab);
+                warpNode.tag = member.Key.ToString();
+                levelGameObjects.Add(warpNode);
+                warpNode.transform.position = member.Value;
+            }
             if (levelHasCherry)
             {
                 GameObject cherry = Instantiate(cherryPrefab);
@@ -653,4 +675,15 @@ public class LevelManager : MonoBehaviour {
     {
         North, East, South, West
     }
+
+    //protected struct WarpLocation
+    //{
+    //    public int warpID;
+    //    public Vector2 location;
+    //    public WarpLocation(int ID, Vector2 loc)
+    //    {
+    //        warpID = ID;
+    //        location = loc;
+    //    }
+    //}
 }
