@@ -656,6 +656,10 @@ public class LevelManager : MonoBehaviour {
             HighScore = 0;
             PlayerPrefs.DeleteAll();
         }
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
 
         if (Input.GetKeyDown(KeyCode.L))
         {
