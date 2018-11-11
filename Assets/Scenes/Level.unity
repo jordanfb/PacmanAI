@@ -664,6 +664,8 @@ GameObject:
   - component: {fileID: 307956821}
   - component: {fileID: 307956820}
   - component: {fileID: 307956822}
+  - component: {fileID: 307956824}
+  - component: {fileID: 307956823}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -692,7 +694,6 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 0a42c332da0ece24b86f02c41a7c8c4a, type: 3}
   - {fileID: 4900000, guid: 0dad1844645b4154ca1a8f351ab70c02, type: 3}
   ghostsCollideWithEachother: 1
-  bigDotsSpecial: 0
   playLevel: 0
   levelTilemap: {fileID: 2093684467}
   tileKeys: 200023006100410064004400650045006600460067004700680048006a004a006b004b006c004c006d004d006e004e006f004f0071005100720052007400540075005500760056007700570078005800790059007a005a00
@@ -791,6 +792,34 @@ MonoBehaviour:
   wallTiles: 23006100410064004400650045006600460067004700680048006a004a006b004b006c004c006d004d006e004e006f004f0071005100720052007400540075005500760056007700570078005800790059007a005a00
   levelWidth: -1
   levelHeight: -1
+--- !u!114 &307956823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 307956819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df67e6e471d2f074ab6d57602854cba5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelWidth: 0
+  levelHeight: 0
+--- !u!114 &307956824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 307956819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 679bfda876c791348a5325ce66e1805e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ghosts: []
+  Pacman: {fileID: 0}
+  states:
+  - {fileID: 307956823}
 --- !u!1 &328316974
 GameObject:
   m_ObjectHideFlags: 0

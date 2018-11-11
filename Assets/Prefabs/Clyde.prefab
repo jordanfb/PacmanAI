@@ -318,12 +318,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0.1
-  facing: 0
   allDirections:
   - {x: 0, y: 1}
   - {x: 1, y: 0}
   - {x: 0, y: -1}
   - {x: -1, y: 0}
+  eyes:
+  - {fileID: 1960452532172564}
+  - {fileID: 1887008935982072}
+  - {fileID: 1241221912796348}
+  - {fileID: 1935501047209696}
   eyesUp: {fileID: 1960452532172564}
   eyesDown: {fileID: 1241221912796348}
   eyesLeft: {fileID: 1935501047209696}
