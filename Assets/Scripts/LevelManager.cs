@@ -28,7 +28,6 @@ public class LevelManager : MonoBehaviour {
     private TextAsset[] levelTextAssets;
 
     public bool ghostsCollideWithEachother = true;
-    public bool bigDotsSpecial = false;
     public bool playLevel = false; // this is used to pause everything during the countdown
     [SerializeField]
     private Tilemap levelTilemap;
@@ -101,6 +100,8 @@ public class LevelManager : MonoBehaviour {
     private int numDotsEaten = 0;
 
     private LevelLoader levelLoader;
+    private ChaseState chasestate;
+    private FSMSystem system;
 
     // Direction
     public enum SpawnOrientation {
@@ -136,6 +137,8 @@ public class LevelManager : MonoBehaviour {
         }
         levelLoader = GetComponent<LevelLoader>();
         levelLoader.ReadAsset(levelTextAssets[levelLoaded]);
+        chasestate = GetComponent<ChaseState>();
+        system = GetComponent<FSMSystem>();
     }
 
     /****  PUBLIC HELPER FUNCTIONS ****/
@@ -196,6 +199,11 @@ public class LevelManager : MonoBehaviour {
     private void SetMap(List<List<bool>> walkable, List<List<char>> charArray = null) {
         isWalkableArray = walkable;
         tileCharArray = charArray;
+        chasestate.Graph = walkable;
+        levelHeight = isWalkableArray.Count;
+        levelWidth = isWalkableArray[0].Count;
+        chasestate.levelHeight = levelHeight;
+        chasestate.levelWidth = levelWidth;
     }
 
     // Sets the tiles for the tilemap
@@ -207,8 +215,6 @@ public class LevelManager : MonoBehaviour {
         int numCherrySpawnLocations = 0; // for averaging the position
         cherryLocation = new Vector2();
         levelHasCherry = false;
-        levelHeight = isWalkableArray.Count;
-        levelWidth = isWalkableArray[0].Count;
         bool[] isGhostInLevel = new bool[4];
 
         if (useTileArray) {
@@ -350,11 +356,13 @@ public class LevelManager : MonoBehaviour {
             Destroy(resetableGameObjects[i]);
         }
         resetableGameObjects.Clear();
+        system.Ghosts.Clear();
 
         currentGhostKills = 0;
         // now spawn new ones and add them to the levelgameobjects list:
         GameObject pacman = Instantiate(pacmanPrefab);
         resetableGameObjects.Add(pacman);
+        system.Pacman = pacman;
         // set the pacman transform and orientation etc:
         pacman.GetComponent<PacmanMovement>().SetLevelManager(this, pacmanSpawnLocation, pacmanSpawnOrientation);
 
@@ -364,6 +372,7 @@ public class LevelManager : MonoBehaviour {
                 GameObject ghost = Instantiate(ghostPrefabs[i]);
                 resetableGameObjects.Add(ghost);
                 ghost.GetComponent<GhostMovement>().SetLevelManager(this, ghostSpawnLocations[i], ghostSpawnOrientations[i]);
+                system.Ghosts.Add(ghost);
             }
         }
 
@@ -482,7 +491,7 @@ public class LevelManager : MonoBehaviour {
         } else if (Input.GetKeyDown(KeyCode.Escape)) {
             Exit();
         }
-	}
+    }
 
     /*
     // Creates random walls

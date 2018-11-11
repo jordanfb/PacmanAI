@@ -79,7 +79,7 @@ public class CharacterMovement : MonoBehaviour {
                 // if you can't move anywhere you're in a dead end or need to make a choice
                 // Just do nothing, the code will return that you're stuck since your destination is the same as your position
             }
-        } else if (goalDirection == -currDirection) {
+        } else if (goalDirection == (currDirection + 2) % 4) {
             // this is for pacman when he changes direction
             // if it's a valid choice then sure he can go there
             Vector2Int goalDestination = new Vector2Int((int)(transform.position.x + allDirections[goalDirection].x), (int)(transform.position.y + allDirections[goalDirection].y));

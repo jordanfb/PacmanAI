@@ -13,25 +13,26 @@ public class PacmanMovement : CharacterMovement {
     }
 
     private void Update() {
-        Up = Input.GetAxis("Vertical");
-        Right = Input.GetAxis("Horizontal");
-        Vector2 inputDir = new Vector2(Right, Up);
-        if (inputDir.SqrMagnitude() > 0 && (inputDir.x == 0 || inputDir.y == 0))
-        {
-            if (inputDir.y > 0) {
-                SetGoalDirection(0);
-            } else if (inputDir.y < 0) {
-                SetGoalDirection(2);
-            }
-            if (inputDir.x > 0) {
-                SetGoalDirection(1);
-            } else if (inputDir.x < 0) {
-                SetGoalDirection(3);
-            }
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
+            SetGoalDirection(0);
+            startedMoving = true;
+        } else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
+            SetGoalDirection(1);
+            startedMoving = true;
+        } else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) {
+            SetGoalDirection(2);
+            startedMoving = true;
+        } else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
+            SetGoalDirection(3);
             startedMoving = true;
         }
 
         animator.SetFloat("speed", (IsMoving() ? 1 : 0));
+    }
+
+    private void FixedUpdate() {
+        if (startedMoving && levelManager.playLevel)
+            Move();
     }
 
     // Set the direction
@@ -56,50 +57,26 @@ public class PacmanMovement : CharacterMovement {
         }
     }
 
-    private void FixedUpdate()
-    {
-        if (startedMoving && levelManager.playLevel)
-            Move();
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
+    private void OnTriggerEnter2D(Collider2D collision) {
         //dot handling
-        if (collision.gameObject.layer == LayerMask.NameToLayer("dot"))
-        {
-            if (collision.gameObject.CompareTag("dot"))
-            {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("dot")) {
+            if (collision.gameObject.CompareTag("dot")) {
                 levelManager.AddPoints(1, 1);
-            }
-            else
-            {
+            } else {
                 // collided with a big dot
-                if (levelManager.bigDotsSpecial)
-                {
-                    levelManager.AddPoints(5, 1); // give 5 times the points like in regular pacman I guess, even though cherries are 100...
-                }
-                else
-                {
-                    levelManager.AddPoints(1, 1); // for now just do the same as regular dots
-                }
+                //levelManager.AddPoints(5, 1); // give 5 times the points like in regular pacman I guess, even though cherries are 100...
+                levelManager.AddPoints(1, 1); // for now just do the same as regular dots
             }
             collision.gameObject.SetActive(false);
-        }
-        else if (collision.gameObject.layer == LayerMask.NameToLayer("fruit"))
-        {
-            if (collision.gameObject.CompareTag("cherry"))
-            {
+        } else if (collision.gameObject.layer == LayerMask.NameToLayer("fruit")) {
+            if (collision.gameObject.CompareTag("cherry")) {
                 levelManager.AddPoints(100);
             }
             collision.gameObject.SetActive(false);
-        }
-        else if (collision.gameObject.layer == LayerMask.NameToLayer("ghost"))
-        {
+        } else if (collision.gameObject.layer == LayerMask.NameToLayer("ghost")) {
             //lose a life
             levelManager.PacmanDied();
-        }
-        else if (collision.gameObject.layer == LayerMask.NameToLayer("warp"))
-        {
+        } else if (collision.gameObject.layer == LayerMask.NameToLayer("warp")) {
             //handle warp stuff
         }
     }

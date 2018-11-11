@@ -6,18 +6,21 @@ public class GhostMovement : CharacterMovement {
     [SerializeField]
     private GameObject[] eyes;
     private bool collidedWithGhost = false; // this is for turning around when the ghosts collide
+    public bool fsm = false;
 
     private void FixedUpdate() {
-        if (!levelManager.playLevel) {
-            return; // don't move if the level isn't playing
-        }
-        if (atDecisionPoint) {
-            // then decide!
-            List<int> choices = ValidDirections();
-            if (choices.Count == 0) {
-                SetGoalDirection(Random.Range(0, 4));
-            } else {
-                SetGoalDirection(choices[Random.Range(0, choices.Count)]);
+        if (!fsm) {
+            if (!levelManager.playLevel) {
+                return; // don't move if the level isn't playing
+            }
+            if (atDecisionPoint) {
+                // then decide!
+                List<int> choices = ValidDirections();
+                if (choices.Count == 0) {
+                    SetGoalDirection(Random.Range(0, 4));
+                } else {
+                    SetGoalDirection(choices[Random.Range(0, choices.Count)]);
+                }
             }
         }
         Move();
