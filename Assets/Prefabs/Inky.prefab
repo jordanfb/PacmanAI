@@ -318,20 +318,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0.1
-  allDirections:
-  - {x: 0, y: 1}
-  - {x: 1, y: 0}
-  - {x: 0, y: -1}
-  - {x: -1, y: 0}
+  atDecisionPoint: 0
   eyes:
   - {fileID: 1051513122614918}
   - {fileID: 1722767046206692}
   - {fileID: 1668133231521098}
   - {fileID: 1202774122075256}
-  eyesUp: {fileID: 1051513122614918}
-  eyesDown: {fileID: 1668133231521098}
-  eyesLeft: {fileID: 1202774122075256}
-  eyesRight: {fileID: 1722767046206692}
+  fsm: 1
 --- !u!212 &212073421560306930
 SpriteRenderer:
   m_ObjectHideFlags: 1

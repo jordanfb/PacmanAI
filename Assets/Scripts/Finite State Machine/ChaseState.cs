@@ -19,12 +19,14 @@ public class ChaseState : FSMState {
     }
     private Vector2Int[] allDirections = { Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left };
 
+    // On initialization
     override protected void Start() {
         system = GetComponent<FSMSystem>();
         paths = new List<List<int>>();
         pathIndex = new List<int>();
     }
 
+    // Called my levelmanager
     public void ResetPaths() {
         paths.Clear();
         pathIndex.Clear();
@@ -50,12 +52,9 @@ public class ChaseState : FSMState {
         }
     }
 
+    // Easiest AI, the enemy path find to pacman's location, then update once reaching the location
     private void Level1AI() {
         for (int i = 0; i < system.Ghosts.Count; i++) {
-            print(i);
-            print(paths.Count);
-            print(paths[i].Count);
-            print(pathIndex.Count);
             if (system.Ghosts[i].GetComponent<GhostMovement>().atDecisionPoint) {
                 system.Ghosts[i].GetComponent<GhostMovement>().SetGoalDirection(paths[i][pathIndex[i]]);
                 pathIndex[i]++;
