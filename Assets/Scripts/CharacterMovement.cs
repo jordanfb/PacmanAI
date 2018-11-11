@@ -7,12 +7,12 @@ public class CharacterMovement : MonoBehaviour {
     protected LevelManager levelManager;
 
     // Direction to face
-    public enum direction {
+    protected enum direction {
         Up, Right, Down, Left
     }
     // Directions are represented as ints to represent the values in allDirections
     // north east south west
-    public Vector2[] allDirections = { Vector2.up, Vector2.right, Vector2.down, Vector2.left };
+    protected Vector2[] allDirections = { Vector2.up, Vector2.right, Vector2.down, Vector2.left };
     // The queued input, or the direction the character would move if possible.
     protected int goalDirection = 0;
     // The direction the character is currently moving on
@@ -20,7 +20,7 @@ public class CharacterMovement : MonoBehaviour {
 
     // this is a valid position which is where you are moving towards. Whenever you are at an integer position you set this
     protected Vector2 destination;
-    protected bool atDecisionPoint = false;
+    public bool atDecisionPoint = false;
 
     public void SetLevelManager(LevelManager lm, Vector3 pos, LevelManager.SpawnOrientation orientation) {
         levelManager = lm;

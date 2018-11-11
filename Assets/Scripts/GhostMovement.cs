@@ -33,7 +33,7 @@ public class GhostMovement : CharacterMovement {
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) {
+    /*private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.layer == LayerMask.NameToLayer("warp")) {
             //handle warp stuff
         } else if (collision.gameObject.layer == LayerMask.NameToLayer("ghost")) {
@@ -49,5 +49,5 @@ public class GhostMovement : CharacterMovement {
         if (collision.gameObject.layer == LayerMask.NameToLayer("ghost")) {
             collidedWithGhost = false;
         }
-    }
+    }*/
 }

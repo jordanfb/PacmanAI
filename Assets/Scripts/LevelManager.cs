@@ -375,6 +375,7 @@ public class LevelManager : MonoBehaviour {
                 system.Ghosts.Add(ghost);
             }
         }
+        chasestate.ResetPaths();
 
         if (resetPoints) {
             for (int i = 0; i < dotLocations.Count; i++) {
