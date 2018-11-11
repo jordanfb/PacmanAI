@@ -53,9 +53,9 @@ GameObject:
   - component: {fileID: 4161438507020490}
   - component: {fileID: 212686740495361652}
   - component: {fileID: 95010838732759548}
+  - component: {fileID: 61638299741956636}
   - component: {fileID: 114420345715231578}
   - component: {fileID: 50788995850306146}
-  - component: {fileID: 61638299741956636}
   m_Layer: 11
   m_Name: Inky
   m_TagString: Untagged
@@ -318,12 +318,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0.1
-  facing: 0
   allDirections:
   - {x: 0, y: 1}
   - {x: 1, y: 0}
   - {x: 0, y: -1}
   - {x: -1, y: 0}
+  eyes:
+  - {fileID: 1051513122614918}
+  - {fileID: 1722767046206692}
+  - {fileID: 1668133231521098}
+  - {fileID: 1202774122075256}
   eyesUp: {fileID: 1051513122614918}
   eyesDown: {fileID: 1668133231521098}
   eyesLeft: {fileID: 1202774122075256}

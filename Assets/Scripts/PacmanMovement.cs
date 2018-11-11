@@ -3,41 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PacmanMovement : CharacterMovement {
-
-    private Vector2 lastInput = new Vector2(0, 0);
     private float Up = 0;
     private float Right = 0;
-    private direction nextFacing;
     private bool startedMoving = false;
     private Animator animator;
 
-    private void Start()
-    {
+    private void Start() {
         animator = GetComponent<Animator>();
     }
 
-    private void Update()
-    {
+    private void Update() {
         Up = Input.GetAxis("Vertical");
         Right = Input.GetAxis("Horizontal");
         Vector2 inputDir = new Vector2(Right, Up);
         if (inputDir.SqrMagnitude() > 0 && (inputDir.x == 0 || inputDir.y == 0))
         {
-            SetGoalDirection(inputDir.normalized);
+            if (inputDir.y > 0) {
+                SetGoalDirection(0);
+            } else if (inputDir.y < 0) {
+                SetGoalDirection(2);
+            }
+            if (inputDir.x > 0) {
+                SetGoalDirection(1);
+            } else if (inputDir.x < 0) {
+                SetGoalDirection(3);
+            }
             startedMoving = true;
         }
 
-        if (IsMoving())
-        {
-            animator.SetFloat("speed", 1);
-        } else
-        {
-            animator.SetFloat("speed", 0);
-        }
+        animator.SetFloat("speed", (IsMoving() ? 1 : 0));
+    }
 
+    // Set the direction
+    override protected void SetDirection(direction facing) {
         //change direction facing
-        switch (facing)
-        {
+        switch (facing) {
             case direction.Down:
                 transform.eulerAngles = new Vector3(0, 0, -90);
                 break;
@@ -61,54 +61,6 @@ public class PacmanMovement : CharacterMovement {
         if (startedMoving && levelManager.playLevel)
             Move();
     }
-
-    /*private void FixedUpdate()
-    {
-        //change direction facing
-        switch (facing)
-        {
-            case direction.Down:
-                transform.eulerAngles = new Vector3(0, 0, -90);
-                break;
-            case direction.Left:
-                transform.eulerAngles = new Vector3(0, 0, -180);
-                break;
-            case direction.Up:
-                transform.eulerAngles = new Vector3(0, 0, 90);
-                break;
-            case direction.Right:
-                transform.eulerAngles = new Vector3(0, 0, 0);
-                break;
-            default:
-                Debug.Log("BROKE rotation switch case");
-                break;
-        }
-
-        //update movement
-        Vector3 nextDest = setDestination(nextFacing);
-        //first check if the next space is a viable option
-        if (CheckCanMoveNextTile(nextDest)) //if that is a viable space to move to, change destination and go
-        {
-            destination = nextDest;
-            if (currentLocation != destination)
-            {
-                Vector3 p = Vector3.MoveTowards(transform.position, destination, speed);
-                transform.position = p;
-            }
-        //if that space doesn't work, try contiuing forward
-        } else if (CheckCanMoveNextTile(destination))
-        {
-            if (currentLocation != destination)
-            {
-                Vector3 p = Vector3.MoveTowards(transform.position, destination, speed);
-                transform.position = p;
-            }
-        }
-        else //if we can't turn and forward doesn't work, stop
-        {
-            //no change
-        }
-    }*/
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
