@@ -44,7 +44,7 @@ public class CharacterMovement : MonoBehaviour {
     protected List<int> ValidDirections() {
         List<int> dirs = new List<int>();
         for (int i = 0; i < 4; i++) {
-            if (CheckCanMoveNextTile(allDirections[i] + (Vector2)transform.position)) {
+            if ((i + 2) % 4 != currDirection && CheckCanMoveNextTile(allDirections[i] + (Vector2)transform.position)) {
                 dirs.Add(i);
             }
         }

@@ -101,6 +101,7 @@ public class LevelManager : MonoBehaviour {
 
     private LevelLoader levelLoader;
     private ChaseState chasestate;
+    private FlankState flankstate;
     private FSMSystem system;
 
     // Direction
@@ -138,6 +139,7 @@ public class LevelManager : MonoBehaviour {
         levelLoader = GetComponent<LevelLoader>();
         levelLoader.ReadAsset(levelTextAssets[levelLoaded]);
         chasestate = GetComponent<ChaseState>();
+        flankstate = GetComponent<FlankState>();
         system = GetComponent<FSMSystem>();
     }
 
@@ -199,11 +201,8 @@ public class LevelManager : MonoBehaviour {
     private void SetMap(List<List<bool>> walkable, List<List<char>> charArray = null) {
         isWalkableArray = walkable;
         tileCharArray = charArray;
-        chasestate.Graph = walkable;
         levelHeight = isWalkableArray.Count;
         levelWidth = isWalkableArray[0].Count;
-        chasestate.levelHeight = levelHeight;
-        chasestate.levelWidth = levelWidth;
     }
 
     // Sets the tiles for the tilemap
@@ -363,6 +362,7 @@ public class LevelManager : MonoBehaviour {
         GameObject pacman = Instantiate(pacmanPrefab);
         resetableGameObjects.Add(pacman);
         system.Pacman = pacman;
+
         // set the pacman transform and orientation etc:
         pacman.GetComponent<PacmanMovement>().SetLevelManager(this, pacmanSpawnLocation, pacmanSpawnOrientation);
 
@@ -375,7 +375,9 @@ public class LevelManager : MonoBehaviour {
                 system.Ghosts.Add(ghost);
             }
         }
-        chasestate.ResetPaths();
+        chasestate.OnReload(isWalkableArray, levelWidth, levelHeight);
+        flankstate.OnReload(isWalkableArray, levelWidth, levelHeight);
+        system.OnReload();
 
         if (resetPoints) {
             for (int i = 0; i < dotLocations.Count; i++) {
