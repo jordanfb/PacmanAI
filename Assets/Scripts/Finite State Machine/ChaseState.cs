@@ -4,6 +4,10 @@ using UnityEngine;
 
 // Enemy pathfinds Pacman every step and follows the path
 public class ChaseState : FSMState {
+    // Adjustable variables
+    [SerializeField]
+    private int chance = 8;
+
     // Store necessary pathfinding variables
     [HideInInspector]
     public List<List<bool>> Graph;
@@ -107,14 +111,12 @@ public class ChaseState : FSMState {
                 system.Ghosts[i].GetComponent<GhostMovement>().SetGoalDirection(paths[i][0]);
             }
         }
-        if (system.level == 3) {
-            if (time < 0) {
-                if (Random.Range(0, 8) == 0) {
-                    system.Transition(0);
-                }
-                time++;
+        if (time < 0) {
+            if (Random.Range(0, chance) == 0) {
+                system.Transition(0);
             }
-            time -= Time.deltaTime;
+            time++;
         }
+        time -= Time.deltaTime;
     }
 }
