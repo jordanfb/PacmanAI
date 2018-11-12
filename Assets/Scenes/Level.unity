@@ -805,6 +805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df67e6e471d2f074ab6d57602854cba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chance: 6
   levelWidth: 0
   levelHeight: 0
 --- !u!114 &307956824
@@ -818,14 +819,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 679bfda876c791348a5325ce66e1805e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level: 0
+  level: 1
   Ghosts: []
   Pacman: {fileID: 0}
   states:
   - {fileID: 307956825}
   - {fileID: 307956823}
   - {fileID: 307956826}
-  currentState: {fileID: 0}
 --- !u!114 &307956825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -837,6 +837,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7263c91f5b2a74044921e1a417b614c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chance: 6
 --- !u!114 &307956826
 MonoBehaviour:
   m_ObjectHideFlags: 0

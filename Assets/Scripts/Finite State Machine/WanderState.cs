@@ -4,6 +4,8 @@ using UnityEngine;
 
 // Move around aimlessly
 public class WanderState : FSMState {
+    [SerializeField]
+    private int chance = 6;
     private float time = 1;
 
     // When active
@@ -11,14 +13,12 @@ public class WanderState : FSMState {
         for (int i = 0; i < system.Ghosts.Count; i++) {
             system.Ghosts[i].GetComponent<GhostMovement>().Wander();
         }
-        if (system.level == 3) {
-            if (time < 0) {
-                if (Random.Range(0, 6) == 0) {
-                    system.Transition(1);
-                }
-                time++;
+        if (time < 0) {
+            if (Random.Range(0, chance) == 0) {
+                system.Transition(1);
             }
-            time -= Time.deltaTime;
+            time++;
         }
+        time -= Time.deltaTime;
     }
 }

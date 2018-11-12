@@ -41,10 +41,13 @@ public class CharacterMovement : MonoBehaviour {
 
     // it returns an array of what directions it can turn at this point.
     // north east south west
-    protected List<int> ValidDirections() {
+    public List<int> ValidDirections(bool turn) {
         List<int> dirs = new List<int>();
         for (int i = 0; i < 4; i++) {
-            if ((i + 2) % 4 != currDirection && CheckCanMoveNextTile(allDirections[i] + (Vector2)transform.position)) {
+            if (!turn && (i + 2) % 4 != currDirection && CheckCanMoveNextTile(allDirections[i] + (Vector2)transform.position)) {
+                dirs.Add(i);
+            }
+            if (turn && CheckCanMoveNextTile(allDirections[i] + (Vector2)transform.position)) {
                 dirs.Add(i);
             }
         }

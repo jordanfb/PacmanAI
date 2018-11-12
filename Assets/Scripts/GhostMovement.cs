@@ -16,7 +16,7 @@ public class GhostMovement : CharacterMovement {
     // Move in a random direction
     public void Wander() {
         if (atDecisionPoint) {
-            List<int> choices = ValidDirections();
+            List<int> choices = ValidDirections(false);
             if (choices.Count == 0) {
                 SetGoalDirection(Random.Range(0, 4));
             } else {
