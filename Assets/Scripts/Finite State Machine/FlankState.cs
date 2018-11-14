@@ -92,7 +92,7 @@ public class FlankState : FSMState {
                 Vector2Int currentPos = ghostPos[i];
                 for (int j = 0; j < paths[i].Count; j++) {
                     currentPos += allDirections[paths[i][j]];
-                    tempGraph[currentPos.x][currentPos.y] = false;
+                    tempGraph[currentPos.y][currentPos.x] = false;
                 }
             }
         }

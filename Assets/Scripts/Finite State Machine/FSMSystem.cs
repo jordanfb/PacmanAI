@@ -13,6 +13,9 @@ public class FSMSystem : MonoBehaviour {
     public GameObject Pacman;
     private LevelManager levelManager;
 
+    [Tooltip("This is just so we can see what it is it doesn't set anything")]
+    public int currentStateIndex = 0;
+
     // State changes
     [SerializeField]
     private FSMState[] states;
@@ -27,7 +30,7 @@ public class FSMSystem : MonoBehaviour {
     // Called by the levelmanager on reload
     public void OnReload() {
         if (level == 1) {
-            Transition(2);
+            Transition(1);
         }
     }
 
@@ -47,5 +50,6 @@ public class FSMSystem : MonoBehaviour {
     // Move to another state
     public void Transition(int stateID) {
         currentState = states[stateID];
+        currentStateIndex = stateID;
     }
 }
