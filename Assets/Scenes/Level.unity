@@ -668,6 +668,7 @@ GameObject:
   - component: {fileID: 307956825}
   - component: {fileID: 307956823}
   - component: {fileID: 307956826}
+  - component: {fileID: 307956827}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -826,6 +827,8 @@ MonoBehaviour:
   - {fileID: 307956825}
   - {fileID: 307956823}
   - {fileID: 307956826}
+  - {fileID: 307956827}
+  enableFSMControl: 1
 --- !u!114 &307956825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -852,6 +855,18 @@ MonoBehaviour:
   distance: 5
   levelWidth: 0
   levelHeight: 0
+--- !u!114 &307956827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 307956819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9b5bfab1fb245e40b5ed0a5bd0ae823, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateToFollow: 0
 --- !u!1 &328316974
 GameObject:
   m_ObjectHideFlags: 0

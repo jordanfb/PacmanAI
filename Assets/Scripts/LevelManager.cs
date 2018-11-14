@@ -98,6 +98,7 @@ public class LevelManager : MonoBehaviour {
     private GameObject cherryGameObject;
     private bool hasSpawnedCherry = false; // so that you don't spawn it multiple times
     private int numDotsEaten = 0;
+    private float bigDotTimer = 0;
 
     private LevelLoader levelLoader;
     private ChaseState chasestate;
@@ -445,6 +446,21 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
+    // When Pacman eats a big dot:
+    public void EatBigDot()
+    {
+        // then change the state machine of ghosts and pacman and whatever.
+        system.Transition(3); // change it to the start flee state
+        // start a timer for however long it goes
+        bigDotTimer = 10; // if it's less than 3 then ghosts flash, if it's zero then they stop flashing and go back to regular combat
+    }
+
+    // when the big dot timer runs out
+    public void EndBigDot()
+    {
+        system.Transition(1);
+    }
+
     // Death event
     public void PacmanDied() {
         numLives--;
@@ -485,6 +501,22 @@ public class LevelManager : MonoBehaviour {
         } else if (Input.GetKeyDown(KeyCode.L)) {
             NextLevel();
         }*/
+
+        // update the big dot timer
+        if (bigDotTimer > 0)
+        {
+            bigDotTimer -= Time.deltaTime;
+            if (bigDotTimer < 3)
+            {
+                // then start the ghosts flashing
+            }
+            if (bigDotTimer <= 0)
+            {
+                bigDotTimer = 0;
+                EndBigDot();
+            }
+        }
+
 
         // Resets the high score
         if (Input.GetKeyDown(KeyCode.F5)) {

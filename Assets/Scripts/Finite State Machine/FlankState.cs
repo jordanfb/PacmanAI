@@ -77,7 +77,8 @@ public class FlankState : FSMState {
     // Sets the path of a ghost that tries not to overlap with the path of another ghost
     private void SetPath(int index) {
         List<List<bool>> tempGraph = new List<List<bool>>();
-        foreach (List<bool> row in Graph) {
+        foreach (List<bool> row in Graph)
+        {
             tempGraph.Add(new List<bool>(row));
         }
         List<int> result;

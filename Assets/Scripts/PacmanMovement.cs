@@ -66,6 +66,7 @@ public class PacmanMovement : CharacterMovement {
                 // collided with a big dot
                 //levelManager.AddPoints(5, 1); // give 5 times the points like in regular pacman I guess, even though cherries are 100...
                 levelManager.AddPoints(1, 1); // for now just do the same as regular dots
+                levelManager.EatBigDot();
             }
             collision.gameObject.SetActive(false);
         } else if (collision.gameObject.layer == LayerMask.NameToLayer("fruit")) {

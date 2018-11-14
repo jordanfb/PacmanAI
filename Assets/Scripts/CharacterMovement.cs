@@ -100,6 +100,12 @@ public class CharacterMovement : MonoBehaviour {
         transform.position = Vector2.MoveTowards(transform.position, destination, speed);
     }
 
+    public void FlipDirection()
+    {
+        // called when the ghosts have to run away
+        SetGoalDirection((currDirection + 2) % 4);
+    }
+
     // Base function to override based on ghost or pacman
     virtual protected void SetDirection(direction facing) { }
 }

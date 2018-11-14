@@ -18,6 +18,9 @@ public class FSMSystem : MonoBehaviour {
     private FSMState[] states;
     private FSMState currentState;
 
+    [Space]
+    public bool enableFSMControl = true; // this is so we can swap between version 1 and 2 in the assignment
+
     // Level 0- Wander Behavior
     // Level 1- Chase Behavior
 
