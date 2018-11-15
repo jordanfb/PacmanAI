@@ -669,6 +669,7 @@ GameObject:
   - component: {fileID: 307956823}
   - component: {fileID: 307956826}
   - component: {fileID: 307956827}
+  - component: {fileID: 307956828}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -766,6 +767,7 @@ MonoBehaviour:
   UIYOffset: 0.025
   scoreDisplay: {fileID: 1785803040}
   highscoreDisplay: {fileID: 1117332784}
+  bigDotTimer: 0
 --- !u!4 &307956821
 Transform:
   m_ObjectHideFlags: 0
@@ -823,11 +825,13 @@ MonoBehaviour:
   level: 1
   Ghosts: []
   Pacman: {fileID: 0}
+  currentStateIndex: 0
   states:
   - {fileID: 307956825}
   - {fileID: 307956823}
   - {fileID: 307956826}
   - {fileID: 307956827}
+  - {fileID: 307956828}
   enableFSMControl: 1
 --- !u!114 &307956825
 MonoBehaviour:
@@ -867,6 +871,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateToFollow: 0
+--- !u!114 &307956828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 307956819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4e786b1722f01f458f7ad11c39b198b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelWidth: 0
+  levelHeight: 0
 --- !u!1 &328316974
 GameObject:
   m_ObjectHideFlags: 0
