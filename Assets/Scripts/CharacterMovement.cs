@@ -20,6 +20,7 @@ public class CharacterMovement : MonoBehaviour {
 
     // this is a valid position which is where you are moving towards. Whenever you are at an integer position you set this
     protected Vector2 destination;
+    [HideInInspector]
     public bool atDecisionPoint = false;
 
     public void SetLevelManager(LevelManager lm, Vector3 pos, LevelManager.SpawnOrientation orientation) {

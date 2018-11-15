@@ -74,9 +74,6 @@ public class PacmanMovement : CharacterMovement {
                 levelManager.AddPoints(100);
             }
             collision.gameObject.SetActive(false);
-        } else if (collision.gameObject.layer == LayerMask.NameToLayer("ghost")) {
-            //lose a life
-            levelManager.PacmanDied();
         } else if (collision.gameObject.layer == LayerMask.NameToLayer("warp")) {
             //handle warp stuff
         }

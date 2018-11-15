@@ -98,11 +98,12 @@ public class LevelManager : MonoBehaviour {
     private GameObject cherryGameObject;
     private bool hasSpawnedCherry = false; // so that you don't spawn it multiple times
     private int numDotsEaten = 0;
-    private float bigDotTimer = 0;
+    public float bigDotTimer = 0;
 
     private LevelLoader levelLoader;
     private ChaseState chasestate;
     private FlankState flankstate;
+    private DeathState deathstate;
     private FSMSystem system;
 
     // Direction
@@ -141,6 +142,7 @@ public class LevelManager : MonoBehaviour {
         levelLoader.ReadAsset(levelTextAssets[levelLoaded]);
         chasestate = GetComponent<ChaseState>();
         flankstate = GetComponent<FlankState>();
+        deathstate = GetComponent<DeathState>();
         system = GetComponent<FSMSystem>();
     }
 
@@ -378,6 +380,7 @@ public class LevelManager : MonoBehaviour {
         }
         chasestate.OnReload(isWalkableArray, levelWidth, levelHeight);
         flankstate.OnReload(isWalkableArray, levelWidth, levelHeight);
+        deathstate.OnReload(isWalkableArray, levelWidth, levelHeight, ghostSpawnLocations);
         system.OnReload();
 
         if (resetPoints) {
@@ -450,14 +453,18 @@ public class LevelManager : MonoBehaviour {
     public void EatBigDot()
     {
         // then change the state machine of ghosts and pacman and whatever.
-        system.Transition(3); // change it to the start flee state
         // start a timer for however long it goes
         bigDotTimer = 10; // if it's less than 3 then ghosts flash, if it's zero then they stop flashing and go back to regular combat
+        system.Transition(4); // change it to the deathstate
+        deathstate.BigDotTrigger();
     }
 
     // when the big dot timer runs out
     public void EndBigDot()
     {
+        for (int i = 0; i < system.Ghosts.Count; i++) {
+            system.Ghosts[i].GetComponent<GhostMovement>().SetAlmighty(true);
+        }
         system.Transition(1);
     }
 

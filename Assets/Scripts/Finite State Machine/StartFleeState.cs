@@ -15,6 +15,6 @@ public class StartFleeState : FSMState
         {
             system.Ghosts[i].GetComponent<GhostMovement>().FlipDirection();
         }
-        system.Transition(0);
+        system.Transition(stateToFollow);
     }
 }

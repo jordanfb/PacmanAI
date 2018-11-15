@@ -2,12 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Enemy pathfinds Pacman every step and follows the path
-public class ChaseState : FSMState {
-    // Adjustable variables
-    [SerializeField]
-    private int chance = 8;
-
+public class DeathState : FSMState {
     // Store necessary pathfinding variables
     [HideInInspector]
     public List<List<bool>> Graph;
@@ -16,7 +11,8 @@ public class ChaseState : FSMState {
     [HideInInspector]
     public int levelHeight;
     private List<List<int>> paths;
-    private float time = 1;
+    private List<int> pathIndex;
+    private List<Vector2Int> ghostSpawns;
 
     // For direction calculations
     private enum direction {
@@ -77,18 +73,32 @@ public class ChaseState : FSMState {
     // Sets the path of a ghost
     private void SetPath(int index) {
         paths[index] = PathFind(new Vector2Int((int)system.Ghosts[index].transform.position.x, (int)system.Ghosts[index].transform.position.y),
-                new Vector2Int((int)system.Pacman.transform.position.x, (int)system.Pacman.transform.position.y));
+                ghostSpawns[index]);
+        pathIndex[index] = 0;
     }
 
     // Called by the levelmanager on reload
-    public void OnReload(List<List<bool>> graph, int levelwidth, int levelheight) {
+    public void OnReload(List<List<bool>> graph, int levelwidth, int levelheight, Vector2[] spawns) {
         Graph = graph;
         levelWidth = levelwidth;
         levelHeight = levelheight;
         paths.Clear();
+        pathIndex.Clear();
+        ghostSpawns.Clear();
+        for (int i = 0; i < spawns.Length; i++) {
+            ghostSpawns.Add(new Vector2Int((int)Mathf.Floor(spawns[i].x), (int)Mathf.Floor(spawns[i].y)));
+        }
         for (int i = 0; i < system.Ghosts.Count; i++) {
             paths.Add(null);
-            SetPath(i);
+            pathIndex.Add(0);
+        }
+    }
+
+    // Called by the levelmanager to trigger blue ghost behavior
+    public void BigDotTrigger() {
+        for (int i = 0; i < system.Ghosts.Count; i++) {
+            system.Ghosts[i].GetComponent<GhostMovement>().FlipDirection();
+            system.Ghosts[i].GetComponent<GhostMovement>().SetAlmighty(false);
         }
     }
 
@@ -96,22 +106,26 @@ public class ChaseState : FSMState {
     override protected void Start() {
         system = GetComponent<FSMSystem>();
         paths = new List<List<int>>();
+        pathIndex = new List<int>();
+        ghostSpawns = new List<Vector2Int>();
     }
 
     // When active
     override public void Active() {
         for (int i = 0; i < system.Ghosts.Count; i++) {
-            if (system.Ghosts[i].GetComponent<GhostMovement>().atDecisionPoint) {
-                SetPath(i);
-                system.Ghosts[i].GetComponent<GhostMovement>().SetGoalDirection(paths[i][0]);
+            if (system.Ghosts[i].GetComponent<GhostMovement>().Ded()) {
+                if (paths[i] == null) {
+                    SetPath(i);
+                } else if (pathIndex[i] < paths[i].Count && system.Ghosts[i].GetComponent<GhostMovement>().atDecisionPoint) {
+                    system.Ghosts[i].GetComponent<GhostMovement>().SetGoalDirection(paths[i][pathIndex[i]]);
+                    pathIndex[i]++;
+                } else if (pathIndex[i] >= paths[i].Count) {
+                    system.Ghosts[i].GetComponent<GhostMovement>().DedGhost(false);
+                    paths[i] = null;
+                }
+            } else {
+                system.Ghosts[i].GetComponent<GhostMovement>().Wander();
             }
         }
-        if (time < 0) {
-            if (Random.Range(0, chance) == 0) {
-                system.Transition(0);
-            }
-            time++;
-        }
-        time -= Time.deltaTime;
     }
 }
