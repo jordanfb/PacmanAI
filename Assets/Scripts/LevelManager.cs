@@ -29,6 +29,7 @@ public class LevelManager : MonoBehaviour {
 
     public bool ghostsCollideWithEachother = true;
     public bool playLevel = false; // this is used to pause everything during the countdown
+    public bool deathAnimation = false; // this is true when pacman needs to die and false afterwards to reset everything.
     [SerializeField]
     private Tilemap levelTilemap;
     [SerializeField]
@@ -86,13 +87,15 @@ public class LevelManager : MonoBehaviour {
     private Vector2 cherryLocation;
     private bool levelHasCherry = false;
 
+    private List<GameObject> ghostList = new List<GameObject>(); // for the death animation
+
     private int levelLoaded = 0;
     private int points;
     private int ghostKills;
     private int currentGhostKills;
 
     private int highScore;
-    private int numLives;
+    public int numLives;
     private List<GameObject> levelGameObjects = new List<GameObject>(); // these get destroyed and remade every time the level is reloaded.
     private List<GameObject> resetableGameObjects = new List<GameObject>(); // these are the ghosts and pacman which get reset when pacman dies
     private GameObject cherryGameObject;
@@ -144,6 +147,18 @@ public class LevelManager : MonoBehaviour {
         flankstate = GetComponent<FlankState>();
         deathstate = GetComponent<DeathState>();
         system = GetComponent<FSMSystem>();
+    }
+
+    public void UseSingleFSM()
+    {
+        // this excludes the UseIndividualFSMs function
+        system.enableFSMControl = true;
+    }
+
+    public void UseIndividualFSMs()
+    {
+        // this excludes the UseSingleFSM function
+        system.enableFSMControl = false;
     }
 
     /****  PUBLIC HELPER FUNCTIONS ****/
@@ -338,6 +353,7 @@ public class LevelManager : MonoBehaviour {
         scoreDisplayParent.SetActive(false);
         Time.timeScale = 1;
         StartCoroutine(StartCountdown());
+        ghostList.Clear();
 
         if (resetPoints) {
             numDotsEaten = 0;
@@ -373,21 +389,33 @@ public class LevelManager : MonoBehaviour {
             // only spawn it if the x >= 0, otherwise it's off the map because it doesn't have a spawning position
             if (ghostSpawnLocations[i].x >= 0) {
                 GameObject ghost = Instantiate(ghostPrefabs[i]);
+                ghost.SetActive(true);
                 resetableGameObjects.Add(ghost);
                 ghost.GetComponent<GhostMovement>().SetLevelManager(this, ghostSpawnLocations[i], ghostSpawnOrientations[i]);
                 system.Ghosts.Add(ghost);
+                IndividualFSMSystem s = ghost.GetComponent<IndividualFSMSystem>();
+                s.enableFSMControl = !system.enableFSMControl; // set the AI control
+                s.Pacman = pacman;
+                ghostList.Add(ghost);
             }
         }
         chasestate.OnReload(isWalkableArray, levelWidth, levelHeight);
         flankstate.OnReload(isWalkableArray, levelWidth, levelHeight);
         deathstate.OnReload(isWalkableArray, levelWidth, levelHeight, ghostSpawnLocations);
         system.OnReload();
+        int ghostIndex = 0;
+        foreach (GameObject ghost in ghostList)
+        {
+            IndividualFSMSystem s = ghost.GetComponent<IndividualFSMSystem>();
+            s.OnReload(isWalkableArray, levelWidth, levelHeight, ghostSpawnLocations, ghostIndex);
+            ghostIndex++;
+        }
 
         if (resetPoints) {
             for (int i = 0; i < dotLocations.Count; i++) {
                 GameObject dot = Instantiate(dotPrefab);
                 levelGameObjects.Add(dot);
-                dot.transform.position = dotLocations[i];
+                dot.transform.position = dotLocations[i]    ;
             }
             for (int i = 0; i < bigDotLocations.Count; i++) {
                 GameObject bigDot = Instantiate(bigDotPrefab);
@@ -455,8 +483,29 @@ public class LevelManager : MonoBehaviour {
         // then change the state machine of ghosts and pacman and whatever.
         // start a timer for however long it goes
         bigDotTimer = 10; // if it's less than 3 then ghosts flash, if it's zero then they stop flashing and go back to regular combat
-        system.Transition(4); // change it to the deathstate
+
+        if (system.enableFSMControl)
+            system.Transition(4); // change it to the deathstate
+        else
+        {
+            foreach (GameObject ghost in ghostList)
+            {
+                IndividualFSMSystem s = ghost.GetComponent<IndividualFSMSystem>();
+                s.Transition("FleeState");
+            }
+        }
+
         deathstate.BigDotTrigger();
+    }
+
+    public void GhostDied(GhostMovement movement)
+    {
+        if (!system.enableFSMControl)
+        {
+            // if its under individual control:
+            IndividualFSMSystem s = movement.GetComponent<IndividualFSMSystem>();
+            s.Transition("DeathState");
+        }
     }
 
     // when the big dot timer runs out
@@ -465,15 +514,47 @@ public class LevelManager : MonoBehaviour {
         for (int i = 0; i < system.Ghosts.Count; i++) {
             system.Ghosts[i].GetComponent<GhostMovement>().SetAlmighty(true);
         }
-        system.Transition(1);
+
+        if (system.enableFSMControl)
+            system.Transition(1); // change it to the deathstate
+        else
+        {
+            foreach (GameObject ghost in ghostList)
+            {
+                IndividualFSMSystem s = ghost.GetComponent<IndividualFSMSystem>();
+                s.Transition("WanderState");
+            }
+        }
     }
 
     // Death event
     public void PacmanDied() {
         numLives--;
-        if (numLives > 0) {
+        // now we pause everything and run the death animation for pacman
+        PlayDeathAnimation();
+    }
+
+    private void PlayDeathAnimation()
+    {
+        playLevel = false;
+        deathAnimation = true;
+        // hide all the ghosts
+        for (int i = 0; i < ghostList.Count; i++)
+        {
+            ghostList[i].SetActive(false);
+        }
+        // the death animation is already started by virtue of the boolean being set I guess?
+    }
+
+    public void DonePacmanDeathAnimation()
+    {
+        deathAnimation = false;
+        if (numLives > 0)
+        {
             ReloadLevel();
-        } else {
+        }
+        else
+        {
             DisplayEndGameText(false);
         }
     }

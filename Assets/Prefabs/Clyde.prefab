@@ -27,6 +27,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1115772814595238
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4589481504999322}
+  - component: {fileID: 212925436522507596}
+  m_Layer: 0
+  m_Name: ScaredEyes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
 --- !u!1 &1241221912796348
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,13 +72,17 @@ GameObject:
   - component: {fileID: 61272904779795476}
   - component: {fileID: 114565071188320216}
   - component: {fileID: 50343266026466796}
+  - component: {fileID: 114893586974620706}
+  - component: {fileID: 114296615320592630}
+  - component: {fileID: 114177056826268102}
+  - component: {fileID: 114475520873128994}
   m_Layer: 11
   m_Name: Clyde
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1744846002707286
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,6 +164,7 @@ Transform:
   - {fileID: 4540518164446590}
   - {fileID: 4738673676274496}
   - {fileID: 4665028603932518}
+  - {fileID: 4589481504999322}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -185,6 +206,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4205031708657674}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4589481504999322
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1115772814595238}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4205031708657674}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4665028603932518
 Transform:
@@ -297,7 +331,7 @@ Animator:
   m_GameObject: {fileID: 1727273393774786}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 802ddff027936f7419db2588e7758d33, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -306,6 +340,46 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114177056826268102
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1727273393774786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 506aa51d95dda344686ae6c5d0318959, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateName: FleeState
+  stateToFollow: WanderState
+--- !u!114 &114296615320592630
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1727273393774786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b59b5b2abd821b84c90d8fe4d1dcf6b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateName: WanderState
+  chance: 6
+--- !u!114 &114475520873128994
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1727273393774786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfa483f9663f5e049ba878ba278e2523, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateName: DeathState
+  levelWidth: 0
+  levelHeight: 0
 --- !u!114 &114565071188320216
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -324,6 +398,30 @@ MonoBehaviour:
   - {fileID: 1887008935982072}
   - {fileID: 1241221912796348}
   - {fileID: 1935501047209696}
+  deadGhostColor: {r: 0, g: 0.1764706, b: 0.9450981, a: 1}
+  ghostBottom: {fileID: 212023669596127144}
+  ghostTop: {fileID: 212462194032183548}
+  deadEyes: {fileID: 1115772814595238}
+--- !u!114 &114893586974620706
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1727273393774786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b409f14c261cf9c4eaa99a56d92f1a8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingState: WanderState
+  level: 0
+  Ghosts: []
+  Pacman: {fileID: 0}
+  states:
+  - {fileID: 114296615320592630}
+  - {fileID: 114177056826268102}
+  - {fileID: 114475520873128994}
+  enableFSMControl: 0
 --- !u!212 &212023669596127144
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -641,6 +739,52 @@ SpriteRenderer:
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 2, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!212 &212925436522507596
+SpriteRenderer:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1115772814595238}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300120, guid: f9c8c62fdd1d96d4d8def8f1a2c257bd, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 2, y: 2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

@@ -9,6 +9,45 @@ public class GhostMovement : CharacterMovement {
     private bool isDead = false;
     private bool almighty = true;
 
+    [Header("Animation Stuff")]
+    private Color originalGhostColor;
+    direction currentDirection;
+    public Color deadGhostColor;
+    public SpriteRenderer ghostBottom;
+    public SpriteRenderer ghostTop;
+    public GameObject deadEyes;    
+
+    private void Start()
+    {
+        SpriteRenderer[] children = GetComponentsInChildren<SpriteRenderer>();
+        originalGhostColor = ghostBottom.color;
+
+        //animator = GetComponentInChildren<Animator>();
+    }
+
+    private void Update()
+    {
+        if (levelManager.playLevel && !almighty)
+        {
+            if (levelManager.bigDotTimer < 3)
+            {
+                // flash!
+                if ((int)(levelManager.bigDotTimer * 8) % 2 == 0)
+                {
+                    // flash off
+                    ghostBottom.color = deadGhostColor;
+                    ghostTop.color = deadGhostColor;
+                }
+                else
+                {
+                    // flash normal
+                    ghostBottom.color = originalGhostColor;
+                    ghostTop.color = originalGhostColor;
+                }
+            }
+        }
+    }
+
     private void FixedUpdate() {
         if (levelManager.playLevel) {
             Move();
@@ -29,8 +68,17 @@ public class GhostMovement : CharacterMovement {
 
     // Set the direction
     override protected void SetDirection(direction facing) {
+        currentDirection = facing;
         for (int i = 0; i < eyes.Length; i++) {
-            eyes[i].SetActive((int)facing == i);
+            eyes[i].SetActive((int)facing == i && (almighty || isDead));
+        }
+        if (!almighty && !isDead)
+        {
+            // then turn on the scared eyes!
+            deadEyes.SetActive(true);
+        } else
+        {
+            deadEyes.SetActive(false);
         }
     }
 
@@ -38,9 +86,17 @@ public class GhostMovement : CharacterMovement {
         almighty = Almighty;
         if (!Almighty) {
             speed = 0.05f;
-        } else {
+            ghostBottom.color = deadGhostColor;
+            ghostTop.color = deadGhostColor;
+        } else if (!isDead) {
             speed = 0.1f;
+            ghostBottom.color = originalGhostColor;
+            ghostTop.color = originalGhostColor;
+        } else
+        {
+            speed = 0.1f; // if we aren't scared we're regular speed
         }
+        SetDirection(currentDirection);
     }
 
     // Is ghost F?
@@ -54,7 +110,14 @@ public class GhostMovement : CharacterMovement {
         GetComponent<BoxCollider2D>().enabled = !isded;
         if (isded) {
             speed = 0.2f;
+            ghostBottom.color = new Color(0, 0, 0, 0); // deadGhostColor;
+            ghostTop.color = new Color(0, 0, 0, 0);
+        } else
+        {
+            ghostBottom.color = originalGhostColor;
+            ghostTop.color = originalGhostColor;
         }
+        SetDirection(currentDirection);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -73,6 +136,8 @@ public class GhostMovement : CharacterMovement {
             } else {
                 DedGhost(true);
                 SetAlmighty(true);
+                // enable the death state of the individual one if individual FSMs are enabled
+                levelManager.GhostDied(this);
             }
         }
     }

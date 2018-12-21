@@ -42,7 +42,7 @@ public class FSMSystem : MonoBehaviour {
 
     // Update is called once per frame
     void FixedUpdate () {
-        if (levelManager.playLevel) {
+        if (levelManager.playLevel && enableFSMControl) {
             currentState.Active();
         }
     }

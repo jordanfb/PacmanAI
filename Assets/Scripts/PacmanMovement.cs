@@ -13,6 +13,13 @@ public class PacmanMovement : CharacterMovement {
     }
 
     private void Update() {
+        if (levelManager.deathAnimation)
+        {
+            // then die!
+            // if you're done, call this:
+            Debug.Log("PLay death animation");
+            levelManager.DonePacmanDeathAnimation();
+        }
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
             SetGoalDirection(0);
             startedMoving = true;
